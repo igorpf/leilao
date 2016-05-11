@@ -33,7 +33,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
  */
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "com.leilao")
+@EnableJpaRepositories(basePackages = "com.leilao.entidades")
 @PropertySource(value = {"classpath:application.properties"})
 public class PersistenceConfig {
 
