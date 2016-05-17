@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -32,8 +33,9 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
  * @author igor
  */
 @Configuration
+@ComponentScan(basePackages={"com.leilao.entidades","com.leilao.servicos"})
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "com.leilao.entidades")
+@EnableJpaRepositories(basePackages = "com.leilao.repositorios" )
 @PropertySource(value = {"classpath:application.properties"})
 public class PersistenceConfig {
 
@@ -56,7 +58,7 @@ public class PersistenceConfig {
         vendorAdapter.setShowSql(Boolean.TRUE);
         factory.setDataSource(dataSource());
         factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan("com.site.springmvc.model");
+        factory.setPackagesToScan("com.leilao.entidades");
         Properties jpaProperties = new Properties();
         jpaProperties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
         jpaProperties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
@@ -86,7 +88,6 @@ public class PersistenceConfig {
         DataSourceInitializer dataSourceInitializer = new DataSourceInitializer();
         dataSourceInitializer.setDataSource(dataSource);
         ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
-        databasePopulator.addScript(new ClassPathResource("db.sql"));
         dataSourceInitializer.setDatabasePopulator(databasePopulator);
         dataSourceInitializer.setEnabled(Boolean.parseBoolean(initDatabase));
         return dataSourceInitializer;
