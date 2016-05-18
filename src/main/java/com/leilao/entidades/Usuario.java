@@ -21,7 +21,7 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "user_seq")
     @SequenceGenerator(name = "user_seq")
-    private int id;
+    private Integer id;
 
     @Column
     private String nome;
@@ -38,11 +38,11 @@ public class Usuario {
         this.vendas= new ArrayList<>();
     }
     
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

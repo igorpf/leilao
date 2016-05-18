@@ -7,7 +7,6 @@ package com.leilao.GUI;
 
 import org.springframework.stereotype.Component;
 import javafx.scene.layout.GridPane;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *

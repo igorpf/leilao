@@ -15,13 +15,13 @@ import javax.persistence.*;
 @DiscriminatorValue("1")
 public class Imovel extends Lote{
     
-    private float area;
+    private Float area;
     
     private Tipo tipo;
     
-    private int numeroQuartos;
+    private Integer numeroQuartos;
     
-    private int numeroBanheiros;
+    private Integer numeroBanheiros;
     
     public Imovel(){
         this.area=0.0f;
@@ -34,11 +34,11 @@ public class Imovel extends Lote{
         Residencial, Comercial
     }
 
-    public float getArea() {
+    public Float getArea() {
         return area;
     }
 
-    public void setArea(float area) {
+    public void setArea(Float area) {
         this.area = area;
     }
 

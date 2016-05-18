@@ -20,7 +20,7 @@ public class Lote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "lote_seq")
     @SequenceGenerator(name = "lote_seq")
-    private int id;
+    private Integer id;
 
     private BigDecimal valorMinimo;
 
@@ -42,11 +42,11 @@ public class Lote {
         this.lanceAtual=BigDecimal.ZERO;
     }
     
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

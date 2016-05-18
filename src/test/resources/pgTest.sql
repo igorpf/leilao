@@ -7,5 +7,5 @@
  * Author:  igor
  * Created: 16/05/2016
  */
-INSERT INTO usuario (id, type,nome) VALUES (1,'1','Func');
-INSERT INTO lote (id,type, nome, vendedor_id) VALUES (1,'1','casa',1);
+INSERT INTO usuario ( type,nome) VALUES ('1','Func');
+INSERT INTO lote (type, nome, vendedor_id) VALUES ('1','casa',1);
