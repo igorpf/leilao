@@ -1,6 +1,5 @@
 package com.leilao;
 
-import com.leilao.GUI.MainLayout;
 import javafx.application.Preloader;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,9 +15,6 @@ public class LeilaoApplication extends AbstractJavaFxApplicationSupport {
 
     @Value("${app.ui.title:Leilao}")//
     private String windowTitle;
-    
-    @Autowired//
-    private MainLayout mainLayout;
 
     public static void main(String[] args) {
         launchApp(LeilaoApplication.class, args);
