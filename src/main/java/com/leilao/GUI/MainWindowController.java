@@ -1,5 +1,6 @@
 package com.leilao.GUI;
 
+import com.leilao.PersistenceConfig;
 import com.leilao.entidades.Lote;
 import com.leilao.servicos.ServicoImovel;
 import com.leilao.servicos.ServicoLote;
@@ -18,25 +19,30 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Controller;
 
 /**
  * Created by Arthur on 19/05/2016.
  */
+@Controller
 public class MainWindowController {
 
     @FXML private ListView<Lote> loteListView;
 
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
+    
+    private static final ApplicationContext applicationContext = new AnnotationConfigApplicationContext(PersistenceConfig.class);
 
-    @Autowired
     private ServicoLote servicoLote;
-    @Autowired
     private ServicoImovel servicoImovel;
 
     @FXML
     private void initialize() {
-
+        servicoLote = applicationContext.getBean(ServicoLote.class);
+        servicoImovel = applicationContext.getBean(ServicoImovel.class);
         loteListView.setPlaceholder(new Label("Não existem lotes à venda"));
 
         loteListView.setItems(FXCollections.observableArrayList());

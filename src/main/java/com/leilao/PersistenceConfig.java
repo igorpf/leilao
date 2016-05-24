@@ -33,7 +33,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
  * @author igor
  */
 @Configuration
-@ComponentScan(basePackages={"com.leilao.entidades","com.leilao.servicos"})
+@ComponentScan(basePackages={"com.leilao.servicos","com.leilao.GUI"})
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "com.leilao.repositorios" )
 @PropertySource(value = {"classpath:application.properties"})
