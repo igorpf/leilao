@@ -18,7 +18,7 @@ public class LoteCell extends ListCell<Lote> {
     private LoteCellController controller;
     {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("LoteCell.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("LoteCell.fxml"));
 
         try {
             n = loader.load();
