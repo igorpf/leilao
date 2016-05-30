@@ -43,7 +43,7 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </HBox>
-                              <ListView fx:id="loteListView" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0" />
+                              <ListView fx:id="loteListView" fixedCellSize="90.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0" />
                            </children>
                         </AnchorPane>
                         <VBox prefHeight="200.0" prefWidth="100.0" />
@@ -53,9 +53,9 @@
             </Tab>
             <Tab closable="false" text="Perfil">
                <content>
-                  <AnchorPane>
+                  <AnchorPane fx:id="perfilPane">
                      <children>
-                        <VBox alignment="CENTER" fillWidth="false" layoutX="136.0" prefHeight="381.0" prefWidth="215.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox fx:id="loginPane" alignment="CENTER" fillWidth="false" layoutX="136.0" prefHeight="381.0" prefWidth="215.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <Label prefWidth="150.0" text="Usuário" />
                               <TextField fx:id="usernameField" prefWidth="150.0" />

@@ -30,6 +30,7 @@ public class LoteCell extends ListCell<Lote> {
         setText(null);
         setBorder(null);
         setPadding(Insets.EMPTY);
+
     }
 
     @Override
@@ -45,6 +46,8 @@ public class LoteCell extends ListCell<Lote> {
             else
                 controller.setLote(item);
         }
+
+        controller.prefWidthProperty().bind(getListView().widthProperty().subtract(4));
     }
-    
+
 }

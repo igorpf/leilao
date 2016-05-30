@@ -2,8 +2,10 @@ package com.leilao.GUI;
 
 import com.leilao.entidades.Imovel;
 import com.leilao.entidades.Lote;
+import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -13,6 +15,8 @@ import java.text.NumberFormat;
  */
 public class LoteCellController {
 
+    @FXML private AnchorPane root;
+
     @FXML private Label nameLabel, priceLabel, descriptionLabel;
     @FXML private Label typeLabel, areaLabel, roomsLabel, bathroomsLabel;
 
@@ -21,7 +25,6 @@ public class LoteCellController {
         nameLabel.setText(t.getNome());
         descriptionLabel.setText(t.getDescricao());
         setPriceLabel(t.getLanceAtual());
-
 
         typeLabel.setText("Imóvel " + t.getTipo().name());
 
@@ -46,6 +49,10 @@ public class LoteCellController {
         roomsLabel.setText("");
         bathroomsLabel.setText("");
 
+    }
+
+    public DoubleProperty prefWidthProperty() {
+        return root.prefWidthProperty();
     }
 
     private void setPriceLabel(BigDecimal price) {

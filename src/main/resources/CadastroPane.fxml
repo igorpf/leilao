@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="loginPane" alignment="CENTER" fillWidth="false" prefHeight="381.0" prefWidth="215.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.leilao.GUI.CadastroPaneController">
+   <children>
+      <Label prefWidth="150.0" text="Usuário" />
+      <TextField fx:id="usernameField" prefWidth="150.0" />
+      <Label prefWidth="150.0" text="Senha">
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </Label>
+      <PasswordField fx:id="passwordField" prefWidth="150.0">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </PasswordField>
+      <Label prefWidth="150.0" text="Confirmar Senha">
+         <VBox.margin>
+            <Insets top="5.0" />
+         </VBox.margin>
+      </Label>
+      <PasswordField fx:id="confirmPasswordField" prefWidth="150.0" />
+      <HBox alignment="CENTER" prefHeight="35.0" prefWidth="200.0" spacing="30.0">
+         <children>
+            <Button fx:id="confirmarButton" defaultButton="true" mnemonicParsing="false" onAction="#fazerCadastro" text="Criar conta" />
+            <Button mnemonicParsing="false" onAction="#cancelarCadastro" text="Cancelar" />
+         </children>
+         <VBox.margin>
+            <Insets top="50.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>

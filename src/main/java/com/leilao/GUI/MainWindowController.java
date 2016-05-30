@@ -2,6 +2,7 @@ package com.leilao.GUI;
 
 import com.leilao.PersistenceConfig;
 import com.leilao.entidades.Lote;
+import com.leilao.entidades.Usuario;
 import com.leilao.servicos.ServicoImovel;
 import com.leilao.servicos.ServicoLote;
 import javafx.application.Platform;
@@ -10,8 +11,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -33,6 +36,9 @@ public class MainWindowController {
 
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
+
+    @FXML private AnchorPane perfilPane;
+    @FXML private Pane loginPane;
     
     private static final ApplicationContext applicationContext = new AnnotationConfigApplicationContext(PersistenceConfig.class);
 
@@ -51,8 +57,12 @@ public class MainWindowController {
 
     @FXML
     private void carregarLotes() {
-        loteListView.getItems().setAll(servicoLote.findAll());
-        loteListView.getItems().addAll(servicoImovel.findAll());
+//        loteListView.getItems().setAll(servicoLote.findAll());
+//        loteListView.getItems().addAll(servicoImovel.findAll());
+        Lote t = new Lote();
+        t.setNome("Lote 1");
+
+        loteListView.getItems().add(t);
     }
 
     @FXML
@@ -61,77 +71,67 @@ public class MainWindowController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
+        usernameField.setText("");
+        passwordField.setText("");
+
+        Usuario u = new Usuario();
+        u.setNome(username);
+        fazerLogin(u);
     }
 
     @FXML
     private void abrirCadastroUsuario() {
 
-        Dialog<Pair<String, String>> dialog = new Dialog<>();
-        dialog.setTitle("Cadastrar Usuário");
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("CadastroPane.fxml"));
 
-        ButtonType loginButtonType = new ButtonType("Confirmar", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+        Pane n = null;
+        try {
+            n = loader.load();
 
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
+            AnchorPane.setTopAnchor(n, 0.0);
+            AnchorPane.setBottomAnchor(n, 0.0);
+            AnchorPane.setLeftAnchor(n, 0.0);
+            AnchorPane.setRightAnchor(n, 0.0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        CadastroPaneController controller = loader.<CadastroPaneController>getController();
+        perfilPane.getChildren().setAll(n);
 
-        TextField username = new TextField(usernameField.getText());
-        username.setPromptText("Nome de Usuário");
-        PasswordField password = new PasswordField();
-        password.setPromptText("Senha");
-        PasswordField confirmPassword = new PasswordField();
-        confirmPassword.setPromptText("Confirmar Senha");
+        controller.setStartingUsername(usernameField.getText());
+        usernameField.setText("");
+        passwordField.setText("");
 
-        grid.add(new Label("Nome de usuário:"), 0, 0);
-        grid.add(username, 1, 0);
-        grid.add(new Label("Senha:"), 0, 1);
-        grid.add(password, 1, 1);
-        grid.add(new Label("Confirmar Senha:"), 0, 2);
-        grid.add(confirmPassword, 1, 2);
-
-        Node loginButton = dialog.getDialogPane().lookupButton(loginButtonType);
-        loginButton.setDisable(true);
-
-        Supplier<Boolean> shouldEnableRegister = () -> {
-            if (username.getText().isEmpty())
-                return false;
-            else if (password.getText().isEmpty())
-                return false;
-            else if (!password.getText().equals(confirmPassword.getText()))
-                return false;
+        controller.setOnFinish((user) -> {
+            if (user == null)
+                perfilPane.getChildren().setAll(loginPane);
             else
-                return true;
-        };
-
-        username.textProperty().addListener((observable, oldValue, newValue) -> {
-            loginButton.setDisable(!shouldEnableRegister.get());
+                fazerLogin(user);
         });
 
-        password.textProperty().addListener((observable, oldValue, newValue) -> {
-            loginButton.setDisable(!shouldEnableRegister.get());
-        });
+    }
 
-        confirmPassword.textProperty().addListener((observable, oldValue, newValue) -> {
-            loginButton.setDisable(!shouldEnableRegister.get());
-        });
+    private void fazerLogin(Usuario user) {
 
-        dialog.getDialogPane().setContent(grid);
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PerfilPane.fxml"));
 
-        Platform.runLater(() -> username.requestFocus());
+        Pane n = null;
+        try {
+            n = loader.load();
 
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == loginButtonType) {
-                return new Pair<>(username.getText(), password.getText());
-            }
-            return null;
-        });
+            AnchorPane.setTopAnchor(n, 0.0);
+            AnchorPane.setBottomAnchor(n, 0.0);
+            AnchorPane.setLeftAnchor(n, 0.0);
+            AnchorPane.setRightAnchor(n, 0.0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        PerfilPaneController controller = loader.<PerfilPaneController>getController();
+        perfilPane.getChildren().setAll(n);
 
-        Optional<Pair<String, String>> result = dialog.showAndWait();
+        controller.setUsuario(user);
+        controller.setOnLogout(() -> perfilPane.getChildren().setAll(loginPane));
 
-        result.ifPresent(usernamePassword -> {
-            System.out.println("Username=" + usernamePassword.getKey() + ", Password=" + usernamePassword.getValue());
-        });
 
     }
 
