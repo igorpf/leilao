@@ -53,6 +53,10 @@ public class PerfilPaneController {
             onLogout.run();
     }
 
+    @FXML
+    private void editarPerfil() {
+
+    }
 
 
 }

@@ -5,23 +5,14 @@ import com.leilao.entidades.Lote;
 import com.leilao.entidades.Usuario;
 import com.leilao.servicos.ServicoImovel;
 import com.leilao.servicos.ServicoLote;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.util.Pair;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
-import java.util.Optional;
-import java.util.concurrent.Callable;
-import java.util.function.Supplier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -56,13 +47,8 @@ public class MainWindowController {
     }
 
     @FXML
-    private void carregarLotes() {
-//        loteListView.getItems().setAll(servicoLote.findAll());
-//        loteListView.getItems().addAll(servicoImovel.findAll());
-        Lote t = new Lote();
-        t.setNome("Lote 1");
-
-        loteListView.getItems().add(t);
+    private void carregarLotes() throws Exception {
+        loteListView.getItems().setAll(servicoLote.findAll());
     }
 
     @FXML

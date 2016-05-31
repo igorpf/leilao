@@ -9,16 +9,25 @@
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.leilao.GUI.LoteCellController">
    <children>
-      <VBox layoutX="8.0" layoutY="8.0" prefHeight="84.0" prefWidth="200.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="8.0">
+      <VBox layoutX="8.0" layoutY="8.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="84.0" prefWidth="200.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="8.0">
          <children>
-            <Label fx:id="nameLabel" prefHeight="27.0" prefWidth="62.0" text="Nome">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <padding>
-                  <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-               </padding>
-            </Label>
+            <AnchorPane>
+               <children>
+                  <Label fx:id="nameLabel" layoutY="34.0" text="Nome" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="priceLabel" layoutX="55.0" layoutY="34.0" prefHeight="33.0" text="Preço atual" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
             <HBox prefHeight="17.0" prefWidth="200.0" spacing="10.0">
                <children>
                   <Label fx:id="typeLabel" text="Tipo" />
@@ -30,17 +39,12 @@
                   <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
                </padding>
             </HBox>
-            <Label fx:id="descriptionLabel" alignment="TOP_LEFT" prefHeight="36.0" prefWidth="59.0" text="Descrição">
+            <Label fx:id="descriptionLabel" alignment="TOP_LEFT" text="Descrição" wrapText="true">
                <padding>
                   <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
                </padding>
             </Label>
          </children>
       </VBox>
-      <Label fx:id="priceLabel" layoutX="558.0" layoutY="6.0" text="Preço atual" AnchorPane.bottomAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="8.0">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
    </children>
 </AnchorPane>
