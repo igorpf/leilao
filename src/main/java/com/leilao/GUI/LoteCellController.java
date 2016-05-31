@@ -22,17 +22,22 @@ public class LoteCellController {
 
     public void setImovel(Imovel t) {
 
-        nameLabel.setText(t.getNome());
-        descriptionLabel.setText(t.getDescricao());
-        setPriceLabel(t.getLanceAtual());
+        setBasicInfo(t);
 
         typeLabel.setText("Imóvel " + t.getTipo().name());
 
-        areaLabel.setText(String.format("%f m²", t.getArea()));
-        bathroomsLabel.setText(String.format("%d banheiros", t.getNumeroBanheiros()));
+        areaLabel.setText(String.format("%.0f m²", t.getArea()));
 
         try {
-            roomsLabel.setText(String.format("%d quartos", t.getNumeroQuartos()));
+            boolean plural = t.getNumeroBanheiros() != 1;
+            bathroomsLabel.setText(String.format("%d banheiro%s", t.getNumeroBanheiros(), plural ? "s" : ""));
+        } catch (Exception e) {
+            bathroomsLabel.setText("");
+        }
+
+        try {
+            boolean plural = t.getNumeroQuartos() != 1;
+            roomsLabel.setText(String.format("%d quarto%s", t.getNumeroQuartos(), plural ? "s" : ""));
         } catch (Exception e) {
             roomsLabel.setText("");
         }
@@ -40,16 +45,24 @@ public class LoteCellController {
 
     public void setLote(Lote t) {
 
-        nameLabel.setText(t.getNome());
-        descriptionLabel.setText(t.getDescricao());
-        setPriceLabel(t.getLanceAtual());
+        setBasicInfo(t);
 
         typeLabel.setText("Lote");
         areaLabel.setText("");
         roomsLabel.setText("");
         bathroomsLabel.setText("");
-
     }
+
+    private void setBasicInfo(Lote t) {
+        nameLabel.setText(t.getNome());
+        descriptionLabel.setText(t.getDescricao());
+        if (t.getLanceAtual() == BigDecimal.ZERO)
+            setPriceLabel(t.getValorMinimo());
+        else
+            setPriceLabel(t.getLanceAtual());
+    }
+
+
 
     public DoubleProperty prefWidthProperty() {
         return root.prefWidthProperty();
