@@ -16,9 +16,16 @@ public interface ServicoUsuario {
     /** Busca o usuário com o id especificado
      * 
      * @param id
-     * @return Lote, caso exista, null, caso contrário
+     * @return Usuario, caso exista, null, caso contrário
      */
     Usuario get(int id);
+    
+    /** Busca o usuário com o nome especificado
+     * 
+     * @param nome
+     * @return Usuario, caso exista, null, caso contrário
+     */
+    Usuario get(String nome);
     
     /** Busca todos os usuários
      * 

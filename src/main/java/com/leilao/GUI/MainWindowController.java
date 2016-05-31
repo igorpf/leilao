@@ -5,6 +5,7 @@ import com.leilao.entidades.Lote;
 import com.leilao.entidades.Usuario;
 import com.leilao.servicos.ServicoImovel;
 import com.leilao.servicos.ServicoLote;
+import com.leilao.servicos.ServicoUsuario;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -44,11 +45,13 @@ public class MainWindowController {
 
     private ServicoLote servicoLote;
     private ServicoImovel servicoImovel;
+    private ServicoUsuario servicoUsuario;
 
     @FXML
     private void initialize() {
         servicoLote = applicationContext.getBean(ServicoLote.class);
         servicoImovel = applicationContext.getBean(ServicoImovel.class);
+        servicoUsuario = applicationContext.getBean(ServicoUsuario.class);
         loteListView.setPlaceholder(new Label("Não existem lotes à venda"));
 
         loteListView.setItems(FXCollections.observableArrayList());
@@ -57,12 +60,7 @@ public class MainWindowController {
 
     @FXML
     private void carregarLotes() {
-//        loteListView.getItems().setAll(servicoLote.findAll());
-//        loteListView.getItems().addAll(servicoImovel.findAll());
-        Lote t = new Lote();
-        t.setNome("Lote 1");
-
-        loteListView.getItems().add(t);
+        loteListView.getItems().setAll(servicoLote.findAll());
     }
 
     @FXML
@@ -76,6 +74,8 @@ public class MainWindowController {
 
         Usuario u = new Usuario();
         u.setNome(username);
+        u.setSenha(password);
+        
         fazerLogin(u);
     }
 
@@ -113,25 +113,33 @@ public class MainWindowController {
 
     private void fazerLogin(Usuario user) {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PerfilPane.fxml"));
+        Usuario userDB = servicoUsuario.get(user.getNome());
+        if(userDB != null && user.getSenha().equals(userDB.getSenha()))
+        {
 
-        Pane n = null;
-        try {
-            n = loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PerfilPane.fxml"));
 
-            AnchorPane.setTopAnchor(n, 0.0);
-            AnchorPane.setBottomAnchor(n, 0.0);
-            AnchorPane.setLeftAnchor(n, 0.0);
-            AnchorPane.setRightAnchor(n, 0.0);
-        } catch (IOException e) {
-            e.printStackTrace();
+            Pane n = null;
+            try {
+                n = loader.load();
+
+                AnchorPane.setTopAnchor(n, 0.0);
+                AnchorPane.setBottomAnchor(n, 0.0);
+                AnchorPane.setLeftAnchor(n, 0.0);
+                AnchorPane.setRightAnchor(n, 0.0);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            PerfilPaneController controller = loader.<PerfilPaneController>getController();
+            perfilPane.getChildren().setAll(n);
+
+            controller.setUsuario(user);
+            controller.setOnLogout(() -> perfilPane.getChildren().setAll(loginPane));
         }
-        PerfilPaneController controller = loader.<PerfilPaneController>getController();
-        perfilPane.getChildren().setAll(n);
-
-        controller.setUsuario(user);
-        controller.setOnLogout(() -> perfilPane.getChildren().setAll(loginPane));
-
+        else
+        {
+            //TO DO: mensagem "Nome de usuário ou senha incorreto"
+        }
 
     }
 

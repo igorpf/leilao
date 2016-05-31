@@ -23,8 +23,11 @@ public class Usuario {
     @SequenceGenerator(name = "user_seq")
     private Integer id;
 
-    @Column
+    @Column(unique=true)
     private String nome;
+    
+    @Column
+    private String senha;
 
     @OneToMany(mappedBy = "comprador")
     private List<Lote> compras;
@@ -52,6 +55,14 @@ public class Usuario {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+    
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public List<Lote> getCompras() {

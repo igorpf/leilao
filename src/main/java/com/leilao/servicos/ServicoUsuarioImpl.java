@@ -23,6 +23,11 @@ public class ServicoUsuarioImpl implements ServicoUsuario {
     public Usuario get(int id) {
         return repositorio.findOne(id);
     }
+    
+    @Override
+    public Usuario get(String nome) {
+        return repositorio.findByNome(nome);
+    }
 
     @Override
     public List<Usuario> findAll() {
