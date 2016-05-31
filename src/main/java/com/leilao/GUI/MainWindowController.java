@@ -1,6 +1,7 @@
 package com.leilao.GUI;
 
 import com.leilao.PersistenceConfig;
+import com.leilao.entidades.Imovel;
 import com.leilao.entidades.Lote;
 import com.leilao.entidades.Usuario;
 import com.leilao.servicos.ServicoImovel;
@@ -14,6 +15,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
+
+import javafx.scene.text.Text;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -30,8 +33,13 @@ public class MainWindowController {
     @FXML private PasswordField passwordField;
 
     @FXML private AnchorPane perfilPane;
-    @FXML private Pane loginPane;
-    
+    @FXML private Pane loginPane, masterViewPane;
+
+    @FXML private Label nomeLabel, tipoLabel, precoLabel;
+    @FXML private Text descricaoText;
+    @FXML private TextField lanceField;
+    @FXML private Button lanceButton;
+
     private static final ApplicationContext applicationContext = new AnnotationConfigApplicationContext(PersistenceConfig.class);
 
     private ServicoLote servicoLote;
@@ -47,6 +55,12 @@ public class MainWindowController {
 
         loteListView.setItems(FXCollections.observableArrayList());
         loteListView.setCellFactory(t -> new LoteCell());
+
+        loteListView.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
+            updateMasterView(newValue);
+        }));
+
+        descricaoText.wrappingWidthProperty().bind(masterViewPane.widthProperty().subtract(45));
     }
 
     @FXML
@@ -131,6 +145,19 @@ public class MainWindowController {
         {
             //TO DO: mensagem "Nome de usuário ou senha incorreto"
         }
+
+    }
+
+    private void updateMasterView(Lote t) {
+
+        nomeLabel.setText(t.getNome());
+
+        if (t instanceof Imovel)
+            tipoLabel.setText("Imóvel " + ((Imovel) t).getTipo().name());
+        else
+            tipoLabel.setText("Lote");
+
+        descricaoText.setText(t.getDescricao());
 
     }
 

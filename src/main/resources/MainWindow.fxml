@@ -8,6 +8,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -15,6 +16,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="485.0" prefWidth="486.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.leilao.GUI.MainWindowController">
    <children>
@@ -31,13 +34,13 @@
          <tabs>
             <Tab closable="false" text="Leilões disponíveis">
                <content>
-                  <SplitPane dividerPositions="0.5555555555555556">
+                  <SplitPane dividerPositions="0.5">
                      <items>
                         <AnchorPane>
                            <children>
                               <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#carregarLotes" text="Refrescar" />
+                                    <Button mnemonicParsing="false" onAction="#carregarLotes" text="Atualizar" />
                                  </children>
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -46,7 +49,39 @@
                               <ListView fx:id="loteListView" fixedCellSize="90.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0" />
                            </children>
                         </AnchorPane>
-                        <VBox prefHeight="200.0" prefWidth="100.0" />
+                        <VBox fx:id="masterViewPane" spacing="10.0">
+                           <children>
+                              <AnchorPane prefHeight="43.0" prefWidth="44.0">
+                                 <children>
+                                    <Label fx:id="nomeLabel" text="Nome" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="tipoLabel" text="Tipo" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" />
+                                    <Label fx:id="precoLabel" text="Preço" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                              <HBox spacing="5.0">
+                                 <children>
+                                    <TextField fx:id="lanceField" />
+                                    <Button fx:id="lanceButton" mnemonicParsing="false" text="Dar lance" />
+                                 </children>
+                              </HBox>
+                              <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefViewportHeight="200.0">
+                                 <content>
+                                    <Text fx:id="descricaoText" strokeType="OUTSIDE" strokeWidth="0.0" text="Descrição" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                           <padding>
+                              <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+                           </padding>
+                        </VBox>
                      </items>
                   </SplitPane>
                </content>
