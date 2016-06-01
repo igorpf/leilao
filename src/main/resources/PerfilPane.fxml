@@ -28,13 +28,13 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <ListView fx:id="comprasListView" />
+            <ListView fx:id="comprasListView" fixedCellSize="90.0" />
             <Label text="Vendas">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <ListView fx:id="vendasListView" />
+            <ListView fx:id="vendasListView" fixedCellSize="90.0" />
          </children>
       </VBox>
    </children>

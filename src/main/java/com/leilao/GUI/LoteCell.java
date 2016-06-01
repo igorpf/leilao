@@ -47,7 +47,7 @@ public class LoteCell extends ListCell<Lote> {
                 controller.setLote(item);
         }
 
-        controller.prefWidthProperty().bind(getListView().widthProperty().subtract(4));
+        controller.prefWidthProperty().bind(getListView().widthProperty().subtract(20));
     }
 
 }

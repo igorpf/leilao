@@ -39,7 +39,8 @@ public class PerfilPaneController {
     public void setUsuario(Usuario usuario) {
 
         nomeLabel.setText(usuario.getNome());
-
+        vendasListView.getItems().setAll(usuario.getVendas());
+        comprasListView.getItems().setAll(usuario.getCompras());
     }
 
     public void setOnLogout(Runnable function) {

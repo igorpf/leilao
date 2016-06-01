@@ -3,13 +3,13 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.leilao.GUI.LoteCellController">
    <children>
-      <VBox layoutX="8.0" layoutY="8.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="84.0" prefWidth="200.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="8.0">
+      <VBox layoutX="8.0" layoutY="8.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="84.0" prefWidth="200.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="8.0">
          <children>
             <AnchorPane>
                <children>
@@ -28,17 +28,14 @@
                   </Label>
                </children>
             </AnchorPane>
-            <HBox prefHeight="17.0" prefWidth="200.0" spacing="10.0">
+            <FlowPane hgap="10.0">
                <children>
-                  <Label fx:id="typeLabel" text="Tipo" />
+                  <Label fx:id="typeLabel" graphicTextGap="20.0" text="Tipo" />
                   <Label fx:id="areaLabel" text="Área" />
                   <Label fx:id="roomsLabel" text="Quartos" />
                   <Label fx:id="bathroomsLabel" text="Banheiros" />
                </children>
-               <padding>
-                  <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-               </padding>
-            </HBox>
+            </FlowPane>
             <Label fx:id="descriptionLabel" alignment="TOP_LEFT" text="Descrição" wrapText="true">
                <padding>
                   <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />

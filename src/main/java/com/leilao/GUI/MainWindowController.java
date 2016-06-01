@@ -176,7 +176,7 @@ public class MainWindowController {
             PerfilPaneController controller = loader.getController();
             perfilPane.getChildren().setAll(n);
 
-            controller.setUsuario(user);
+            controller.setUsuario(userDB);
             controller.setOnLogout(() -> perfilPane.getChildren().setAll(loginPane));
         }
 
