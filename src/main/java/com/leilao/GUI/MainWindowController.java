@@ -61,6 +61,10 @@ public class MainWindowController {
         }));
 
         descricaoText.wrappingWidthProperty().bind(masterViewPane.widthProperty().subtract(45));
+
+        try {
+            carregarLotes();
+        } catch (Exception e) {}
     }
 
     @FXML

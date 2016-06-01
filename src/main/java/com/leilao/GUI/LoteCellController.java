@@ -56,13 +56,11 @@ public class LoteCellController {
     private void setBasicInfo(Lote t) {
         nameLabel.setText(t.getNome());
         descriptionLabel.setText(t.getDescricao());
-        if (t.getLanceAtual() == BigDecimal.ZERO)
+        if (t.getLanceAtual().compareTo(BigDecimal.ZERO) == 0)
             setPriceLabel(t.getValorMinimo());
         else
             setPriceLabel(t.getLanceAtual());
     }
-
-
 
     public DoubleProperty prefWidthProperty() {
         return root.prefWidthProperty();
