@@ -29,10 +29,10 @@ public class Usuario {
     @Column
     private String senha;
 
-    @OneToMany(mappedBy = "comprador")
+    @OneToMany(mappedBy = "comprador", fetch=FetchType.EAGER)
     private List<Lote> compras;
 
-    @OneToMany(mappedBy = "vendedor")
+    @OneToMany(mappedBy = "vendedor", fetch=FetchType.EAGER)
     private List<Lote> vendas;
     
     public Usuario(){
