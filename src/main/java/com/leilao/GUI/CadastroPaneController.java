@@ -5,10 +5,15 @@ import com.leilao.entidades.Usuario;
 import com.leilao.servicos.ServicoUsuario;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import java.util.function.Consumer;
+
+import org.controlsfx.validation.ValidationResult;
+import org.controlsfx.validation.ValidationSupport;
+import org.controlsfx.validation.Validator;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -30,21 +35,27 @@ public class CadastroPaneController {
     @FXML
     private void initialize() {
         servicoUsuario = applicationContext.getBean(ServicoUsuario.class);
-        usernameField.textProperty().addListener(((observable, oldValue, newValue) -> updateButtons()));
-        passwordField.textProperty().addListener(((observable, oldValue, newValue) -> updateButtons()));
-        confirmPasswordField.textProperty().addListener(((observable, oldValue, newValue) -> updateButtons()));
 
-    }
+        ValidationSupport val = new ValidationSupport();
 
-    private void updateButtons() {
-        if (usernameField.getText().isEmpty())
-            confirmarButton.setDisable(true);
-        else if (passwordField.getText().isEmpty())
-            confirmarButton.setDisable(true);
-        else if (!passwordField.getText().equals(confirmPasswordField.getText()))
-            confirmarButton.setDisable(true);
-        else
-            confirmarButton.setDisable(false);
+        val.validationResultProperty().addListener((o, oldValue, newValue) -> {
+            confirmarButton.setDisable(!newValue.getErrors().isEmpty());
+        });
+
+        val.registerValidator(usernameField, (Control c, String newValue) -> {
+            if (newValue.isEmpty())
+                return ValidationResult.fromError(c, "É preciso especificar um nome de usuário");
+            else
+                return ValidationResult.fromErrorIf(c, "Usuário já existe", servicoUsuario.get(newValue) != null);
+        });
+
+        val.registerValidator(passwordField, Validator.createEmptyValidator("É preciso especificar uma senha"));
+        val.registerValidator(confirmPasswordField, (Control c, String newValue) -> {
+            if (newValue.isEmpty())
+                return ValidationResult.fromError(c, "É preciso confirmar a senha");
+            else
+                return ValidationResult.fromErrorIf(c, "Senhas não combinam", !newValue.equals(passwordField.getText()));
+        });
     }
 
     public void setStartingUsername(String username) {
@@ -57,23 +68,12 @@ public class CadastroPaneController {
 
     @FXML
     private void fazerCadastro() {
-
         Usuario u = new Usuario();
         u.setNome(usernameField.getText());
         u.setSenha(passwordField.getText());
 
-        //Se usuário não existe, salvar no banco
-        Usuario userDB = servicoUsuario.get(u.getNome());
-        if(userDB == null)
-        {
-            servicoUsuario.save(u);
-        }
-        else
-        {
-            u = null;
-            //TO DO: mensagem "Nome de usuário já existe"
-        }
-        
+        servicoUsuario.save(u);
+
         if (onFinish != null)
             onFinish.accept(u);
     }

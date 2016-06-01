@@ -10,13 +10,16 @@ import com.leilao.servicos.ServicoUsuario;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import org.controlsfx.control.PopOver;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -40,6 +43,9 @@ public class MainWindowController {
     @FXML private TextField lanceField;
     @FXML private Button lanceButton;
 
+    private PopOver errorDisplay;
+    private Label errorLabel;
+
     private static final ApplicationContext applicationContext = new AnnotationConfigApplicationContext(PersistenceConfig.class);
 
     private ServicoLote servicoLote;
@@ -62,9 +68,27 @@ public class MainWindowController {
 
         descricaoText.wrappingWidthProperty().bind(masterViewPane.widthProperty().subtract(45));
 
+        initializePopOver();
+        usernameField.textProperty().addListener(((observable, oldValue, newValue) -> errorDisplay.hide()));
+        passwordField.textProperty().addListener(((observable, oldValue, newValue) -> errorDisplay.hide()));
+
         try {
             carregarLotes();
         } catch (Exception e) {}
+    }
+
+    private void initializePopOver() {
+        errorDisplay = new PopOver();
+        errorDisplay.setArrowLocation(PopOver.ArrowLocation.LEFT_CENTER);
+        errorDisplay.setDetachable(false);
+        errorDisplay.setAutoHide(true);
+
+        errorLabel = new Label();
+        errorLabel.setPrefHeight(20);
+        errorLabel.setPadding(new Insets(0,10,0,10));
+        errorLabel.setTextFill(Color.RED);
+
+        errorDisplay.setContentNode(errorLabel);
     }
 
     @FXML
@@ -77,9 +101,6 @@ public class MainWindowController {
 
         String username = usernameField.getText();
         String password = passwordField.getText();
-
-        usernameField.setText("");
-        passwordField.setText("");
 
         Usuario u = new Usuario();
         u.setNome(username);
@@ -104,7 +125,7 @@ public class MainWindowController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        CadastroPaneController controller = loader.<CadastroPaneController>getController();
+        CadastroPaneController controller = loader.getController();
         perfilPane.getChildren().setAll(n);
 
         controller.setStartingUsername(usernameField.getText());
@@ -121,10 +142,23 @@ public class MainWindowController {
     }
 
     private void fazerLogin(Usuario user) {
-
         Usuario userDB = servicoUsuario.get(user.getNome());
-        if(userDB != null && user.getSenha().equals(userDB.getSenha()))
-        {
+
+        if (userDB == null) {
+            usernameField.setText("");
+            usernameField.requestFocus();
+
+            errorLabel.setText("Esse usuário não existe");
+            errorDisplay.show(usernameField);
+        } else if (!user.getSenha().equals(userDB.getSenha())) {
+            passwordField.setText("");
+            passwordField.requestFocus();
+
+            errorLabel.setText("Senha incorreta");
+            errorDisplay.show(passwordField);
+        } else {
+            usernameField.setText("");
+            passwordField.setText("");
 
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PerfilPane.fxml"));
 
@@ -139,15 +173,11 @@ public class MainWindowController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            PerfilPaneController controller = loader.<PerfilPaneController>getController();
+            PerfilPaneController controller = loader.getController();
             perfilPane.getChildren().setAll(n);
 
             controller.setUsuario(user);
             controller.setOnLogout(() -> perfilPane.getChildren().setAll(loginPane));
-        }
-        else
-        {
-            //TO DO: mensagem "Nome de usuário ou senha incorreto"
         }
 
     }
