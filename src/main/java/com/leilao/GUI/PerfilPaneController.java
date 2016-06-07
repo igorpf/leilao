@@ -53,6 +53,15 @@ public class PerfilPaneController {
         onLogout = function;
     }
 
+    @FXML
+    private void atualizarVendas() {
+        vendasListView.getItems().setAll(user.getVendas());
+    }
+
+    @FXML
+    private void atualizarCompras() {
+        comprasListView.getItems().setAll(user.getCompras());
+    }
 
     @FXML
     private void logout() {

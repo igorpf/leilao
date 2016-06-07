@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -35,8 +36,14 @@ public class MainWindowController {
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
 
-    @FXML private AnchorPane perfilPane;
+    @FXML private TabPane tabPane;
+    @FXML private Tab mainTab, perfilTab;
+
+    @FXML private Label loginMessageLabel;
+
+    @FXML private AnchorPane perfilPane, mainPane;
     @FXML private Pane loginPane, masterViewPane;
+    @FXML private SplitPane listViewPane;
 
     @FXML private Label nomeLabel, tipoLabel, precoLabel;
     @FXML private Text descricaoText;
@@ -51,6 +58,8 @@ public class MainWindowController {
     private ServicoLote servicoLote;
     private ServicoImovel servicoImovel;
     private ServicoUsuario servicoUsuario;
+
+    private Usuario usuarioLogado;
 
     @FXML
     private void initialize() {
@@ -141,6 +150,43 @@ public class MainWindowController {
 
     }
 
+    @FXML
+    private void criarNovoLote() {
+
+        if (usuarioLogado == null) {
+            tabPane.getSelectionModel().select(perfilTab);
+            loginMessageLabel.setText("É preciso estar logado para criar novos lotes.");
+            return;
+        }
+
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("CriarLotePane.fxml"));
+
+        Node n = null;
+        try {
+            n = loader.load();
+
+            AnchorPane.setTopAnchor(n, 0.0);
+            AnchorPane.setBottomAnchor(n, 0.0);
+            AnchorPane.setLeftAnchor(n, 0.0);
+            AnchorPane.setRightAnchor(n, 0.0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        CriarLotePaneController controller = loader.getController();
+        mainPane.getChildren().setAll(n);
+
+        controller.setOwner(usuarioLogado);
+        controller.setOnFinish(t -> {
+            if (t != null)
+                loteListView.getItems().add(t);
+            mainPane.getChildren().setAll(listViewPane);
+        });
+
+    }
+
+
+
+
     private void fazerLogin(Usuario user) {
         Usuario userDB = servicoUsuario.get(user.getNome());
 
@@ -159,6 +205,9 @@ public class MainWindowController {
         } else {
             usernameField.setText("");
             passwordField.setText("");
+            loginMessageLabel.setText("");
+
+            usuarioLogado = userDB;
 
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PerfilPane.fxml"));
 
@@ -177,7 +226,10 @@ public class MainWindowController {
             perfilPane.getChildren().setAll(n);
 
             controller.setUsuario(userDB);
-            controller.setOnLogout(() -> perfilPane.getChildren().setAll(loginPane));
+            controller.setOnLogout(() -> {
+                usuarioLogado = null;
+                perfilPane.getChildren().setAll(loginPane);
+            });
         }
 
     }

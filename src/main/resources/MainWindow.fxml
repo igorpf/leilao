@@ -30,69 +30,78 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TabPane layoutY="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+      <TabPane fx:id="tabPane" layoutY="75.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
          <tabs>
-            <Tab closable="false" text="Leilões disponíveis">
+            <Tab fx:id="mainTab" closable="false" text="Leilões disponíveis">
                <content>
-                  <SplitPane dividerPositions="0.5">
-                     <items>
-                        <AnchorPane>
-                           <children>
-                              <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="mainPane">
+                     <children>
+                        <SplitPane fx:id="listViewPane" dividerPositions="0.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <items>
+                              <AnchorPane>
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#carregarLotes" text="Atualizar" />
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </HBox>
-                              <ListView fx:id="loteListView" fixedCellSize="90.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0" />
-                           </children>
-                        </AnchorPane>
-                        <VBox fx:id="masterViewPane" spacing="10.0">
-                           <children>
-                              <AnchorPane prefHeight="43.0" prefWidth="44.0">
-                                 <children>
-                                    <Label fx:id="nomeLabel" text="Nome" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                       <font>
-                                          <Font size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <Label fx:id="tipoLabel" text="Tipo" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" />
-                                    <Label fx:id="precoLabel" text="Preço" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                       <font>
-                                          <Font name="System Bold" size="12.0" />
-                                       </font>
-                                    </Label>
+                                    <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <Button mnemonicParsing="false" onAction="#carregarLotes" text="Atualizar" />
+                                          <Button mnemonicParsing="false" onAction="#criarNovoLote" text="Criar Novo" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                    </HBox>
+                                    <ListView fx:id="loteListView" fixedCellSize="90.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0" />
                                  </children>
                               </AnchorPane>
-                              <HBox spacing="5.0">
+                              <VBox fx:id="masterViewPane" spacing="10.0">
                                  <children>
-                                    <TextField fx:id="lanceField" />
-                                    <Button fx:id="lanceButton" mnemonicParsing="false" text="Dar lance" />
+                                    <AnchorPane prefHeight="43.0" prefWidth="44.0">
+                                       <children>
+                                          <Label fx:id="nomeLabel" text="Nome" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="tipoLabel" text="Tipo" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" />
+                                          <Label fx:id="precoLabel" text="Preço" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                    <HBox spacing="5.0">
+                                       <children>
+                                          <TextField fx:id="lanceField" />
+                                          <Button fx:id="lanceButton" mnemonicParsing="false" text="Dar lance" />
+                                       </children>
+                                    </HBox>
+                                    <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefViewportHeight="200.0">
+                                       <content>
+                                          <Text fx:id="descricaoText" strokeType="OUTSIDE" strokeWidth="0.0" text="Descrição" />
+                                       </content>
+                                    </ScrollPane>
                                  </children>
-                              </HBox>
-                              <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefViewportHeight="200.0">
-                                 <content>
-                                    <Text fx:id="descricaoText" strokeType="OUTSIDE" strokeWidth="0.0" text="Descrição" />
-                                 </content>
-                              </ScrollPane>
-                           </children>
-                           <padding>
-                              <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
-                           </padding>
-                        </VBox>
-                     </items>
-                  </SplitPane>
+                                 <padding>
+                                    <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+                                 </padding>
+                              </VBox>
+                           </items>
+                        </SplitPane>
+                     </children>
+                  </AnchorPane>
                </content>
             </Tab>
-            <Tab closable="false" text="Perfil">
+            <Tab fx:id="perfilTab" closable="false" text="Perfil">
                <content>
                   <AnchorPane fx:id="perfilPane">
                      <children>
                         <VBox fx:id="loginPane" alignment="CENTER" fillWidth="false" layoutX="136.0" prefHeight="381.0" prefWidth="215.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <Label prefWidth="150.0" text="Usuário" />
+                              <Label fx:id="loginMessageLabel" textFill="RED" />
+                              <Label prefWidth="150.0" text="Usuário">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin></Label>
                               <TextField fx:id="usernameField" prefWidth="150.0" />
                               <Label prefWidth="150.0" text="Senha">
                                  <VBox.margin>
