@@ -89,4 +89,9 @@ public class Usuario {
         this.vendas.add(venda);
     }
 
+    @Override
+    public String toString() {
+        return getNome();
+    }
+
 }

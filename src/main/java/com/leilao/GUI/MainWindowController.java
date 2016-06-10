@@ -1,6 +1,7 @@
 package com.leilao.GUI;
 
 import com.leilao.PersistenceConfig;
+import com.leilao.entidades.Funcionario;
 import com.leilao.entidades.Imovel;
 import com.leilao.entidades.Lote;
 import com.leilao.entidades.Usuario;
@@ -8,6 +9,10 @@ import com.leilao.servicos.ServicoImovel;
 import com.leilao.servicos.ServicoLote;
 import com.leilao.servicos.ServicoUsuario;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -20,10 +25,12 @@ import java.io.IOException;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import org.controlsfx.control.ListSelectionView;
 import org.controlsfx.control.PopOver;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
+import sun.plugin.javascript.navig.Anchor;
 
 /**
  * Created by Arthur on 19/05/2016.
@@ -31,27 +38,42 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class MainWindowController {
 
-    @FXML private ListView<Lote> loteListView;
-
-    @FXML private TextField usernameField;
-    @FXML private PasswordField passwordField;
 
     @FXML private TabPane tabPane;
-    @FXML private Tab mainTab, perfilTab;
+    @FXML private Tab mainTab, perfilTab, aprovarLotesTab, promoverUsuariosTab;
 
-    @FXML private Label loginMessageLabel;
-
-    @FXML private AnchorPane perfilPane, mainPane;
-    @FXML private Pane loginPane, masterViewPane;
+    // Leilões disponiveis
+    @FXML private AnchorPane mainPane;
+    @FXML private Pane masterViewPane;
     @FXML private SplitPane listViewPane;
+    @FXML private ListView<Lote> loteListView;
 
     @FXML private Label nomeLabel, tipoLabel, precoLabel;
     @FXML private Text descricaoText;
     @FXML private TextField lanceField;
     @FXML private Button lanceButton;
 
+    // Login
+    @FXML private AnchorPane perfilPane;
+    @FXML private Pane loginPane;
+
+    @FXML private Label loginMessageLabel;
+    @FXML private TextField usernameField;
+    @FXML private PasswordField passwordField;
+
     private PopOver errorDisplay;
     private Label errorLabel;
+
+    // Aprovar lotes
+    @FXML private Button aprovarLotesPendentesButton;
+    @FXML private ListView<Lote> lotesPendentesListView;
+
+    // Promover usuários
+    @FXML private Button promoverUsuariosButton;
+    @FXML private ListView<Usuario> promoverUsuariosListView;
+    @FXML private TextField filtrarUsuariosField;
+    private ObservableList<Usuario> usuariosList;
+    private FilteredList<Usuario> filteredUsuariosList;
 
     private static final ApplicationContext applicationContext = new AnnotationConfigApplicationContext(PersistenceConfig.class);
 
@@ -81,6 +103,39 @@ public class MainWindowController {
         usernameField.textProperty().addListener(((observable, oldValue, newValue) -> errorDisplay.hide()));
         passwordField.textProperty().addListener(((observable, oldValue, newValue) -> errorDisplay.hide()));
 
+        tabPane.getTabs().removeAll(aprovarLotesTab, promoverUsuariosTab);
+
+        lotesPendentesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        lotesPendentesListView.setCellFactory(t -> new LoteCell());
+        lotesPendentesListView.getSelectionModel().getSelectedItems().addListener(
+                (ListChangeListener.Change<? extends Lote> c) -> {
+                    aprovarLotesPendentesButton.setDisable(c.getList().isEmpty());
+        });
+
+        usuariosList = FXCollections.observableArrayList();
+        filteredUsuariosList = new FilteredList<Usuario>(usuariosList, u -> true);
+        promoverUsuariosListView.setItems(filteredUsuariosList);
+
+        promoverUsuariosListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        promoverUsuariosListView.getSelectionModel().getSelectedItems().addListener(
+                (ListChangeListener.Change<? extends Usuario> c) -> {
+                    promoverUsuariosButton.setDisable(c.getList().isEmpty());
+                });
+
+        filtrarUsuariosField.textProperty().addListener(((observable, oldValue, newValue) -> {
+            filteredUsuariosList.setPredicate(user -> {
+                if (newValue == null || newValue.isEmpty())
+                    return true;
+
+                if (user.getNome().toLowerCase().contains(newValue.toLowerCase()))
+                    return true;
+//                else if (user.getApelido().toLowerCase().contains(newValue.toLowerCase()))
+//                    return true;
+                else
+                    return false;
+            });
+        }));
+
         try {
             carregarLotes();
         } catch (Exception e) {}
@@ -103,6 +158,8 @@ public class MainWindowController {
     @FXML
     private void carregarLotes() throws Exception {
         loteListView.getItems().setAll(servicoLote.findAll());
+        lotesPendentesListView.getItems().setAll(servicoLote.findAll());
+        usuariosList.setAll(servicoUsuario.findAll());
     }
 
     @FXML
@@ -184,9 +241,6 @@ public class MainWindowController {
 
     }
 
-
-
-
     private void fazerLogin(Usuario user) {
         Usuario userDB = servicoUsuario.get(user.getNome());
 
@@ -209,6 +263,9 @@ public class MainWindowController {
 
             usuarioLogado = userDB;
 
+            if (usuarioLogado instanceof Usuario)
+                tabPane.getTabs().addAll(aprovarLotesTab, promoverUsuariosTab);
+
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PerfilPane.fxml"));
 
             Pane n = null;
@@ -229,6 +286,7 @@ public class MainWindowController {
             controller.setOnLogout(() -> {
                 usuarioLogado = null;
                 perfilPane.getChildren().setAll(loginPane);
+                tabPane.getTabs().removeAll(aprovarLotesTab, promoverUsuariosTab);
             });
         }
 

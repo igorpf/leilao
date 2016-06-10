@@ -39,7 +39,7 @@ public class PerfilPaneController {
         vendasListView.setCellFactory(t -> new LoteCell());
 
         comprasListView.prefHeightProperty().bindBidirectional(vendasListView.prefHeightProperty());
-        comprasListView.prefHeightProperty().bind(listsRoot.heightProperty().subtract(50).divide(2));
+        comprasListView.prefHeightProperty().bind(listsRoot.heightProperty().subtract(70).divide(2));
     }
 
     public void setUsuario(Usuario usuario) {
