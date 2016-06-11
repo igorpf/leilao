@@ -30,7 +30,6 @@ import org.controlsfx.control.PopOver;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
-import sun.plugin.javascript.navig.Anchor;
 
 /**
  * Created by Arthur on 19/05/2016.
