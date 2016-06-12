@@ -36,6 +36,8 @@ public class Lote {
     
     @ManyToOne
     private Usuario comprador;
+
+    private Boolean aprovado;
     
     public Lote(){
         this.valorMinimo=BigDecimal.ZERO;
@@ -107,5 +109,11 @@ public class Lote {
     public void setComprador(Usuario comprador) {
         this.comprador = comprador;
     }
-
+    
+    public Boolean getAprovado(){
+        return aprovado;
+    }
+    public void setAprovado(Boolean aprovado){
+        this.aprovado = aprovado;
+    }
 }

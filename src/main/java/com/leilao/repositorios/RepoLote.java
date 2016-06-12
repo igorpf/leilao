@@ -5,6 +5,7 @@
  */
 package com.leilao.repositorios;
 
+import java.util.List;
 import com.leilao.entidades.Lote;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -16,4 +17,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RepoLote extends CrudRepository<Lote, Integer>{
     
+    /** Retorna todos os lotes que estão aprovados ou não
+     * 
+     * @param aprovado 
+     * @return 
+     */
+    List<Lote> findByAprovado(boolean aprovado);
 }

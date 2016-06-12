@@ -10,6 +10,7 @@ import com.leilao.repositorios.RepoUsuario;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,7 @@ public class ServicoUsuarioImpl implements ServicoUsuario {
         i.forEachRemaining(user->{
             l.add(user);
         });
-        return l;
+        return l.stream().filter(u-> u instanceof Usuario).collect(Collectors.toList());
     }
 
     @Override
