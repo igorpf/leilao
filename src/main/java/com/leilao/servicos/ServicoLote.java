@@ -37,4 +37,8 @@ public interface ServicoLote {
      * @param i 
      */
     void save(Lote i);
+    
+    List<Lote> getAprovados();
+    
+    List<Lote> getNaoAprovados();
 }

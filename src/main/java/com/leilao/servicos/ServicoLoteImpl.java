@@ -44,4 +44,14 @@ public class ServicoLoteImpl implements ServicoLote {
         repositorio.save(i);
     }
 
+    @Override
+    public List<Lote> getAprovados() {
+        return repositorio.findByAprovado(true);
+    }
+
+    @Override
+    public List<Lote> getNaoAprovados() {
+        return repositorio.findByAprovado(false);
+    }
+
 }
