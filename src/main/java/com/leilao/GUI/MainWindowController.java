@@ -105,6 +105,8 @@ public class MainWindowController {
 
         tabPane.getTabs().removeAll(aprovarLotesTab, promoverUsuariosTab);
 
+        lotesPendentesListView.setPlaceholder(new Label("Não existem lotes à espera de aprovação"));
+
         lotesPendentesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         lotesPendentesListView.setCellFactory(t -> new LoteCell());
         lotesPendentesListView.getSelectionModel().getSelectedItems().addListener(
@@ -136,9 +138,7 @@ public class MainWindowController {
             });
         }));
 
-        try {
-            carregarLotes();
-        } catch (Exception e) {}
+        carregarLotes();
     }
 
     private void initializePopOver() {
@@ -156,10 +156,12 @@ public class MainWindowController {
     }
 
     @FXML
-    private void carregarLotes() throws Exception {
-        loteListView.getItems().setAll(servicoLote.findAll());
-        lotesPendentesListView.getItems().setAll(servicoLote.findAll());
-        usuariosList.setAll(servicoUsuario.findAll());
+    private void carregarLotes() {
+        try {
+            loteListView.getItems().setAll(servicoLote.getAprovados());
+            lotesPendentesListView.getItems().setAll(servicoLote.getNaoAprovados());
+            usuariosList.setAll(servicoUsuario.findAll());
+        } catch (Exception e) {}
     }
 
     @FXML
@@ -234,11 +236,31 @@ public class MainWindowController {
 
         controller.setOwner(usuarioLogado);
         controller.setOnFinish(t -> {
-            if (t != null)
-                loteListView.getItems().add(t);
+            carregarLotes();
             mainPane.getChildren().setAll(listViewPane);
         });
 
+    }
+
+    @FXML
+    private void aprovarLotesPendentes() {
+
+        for (Lote t : lotesPendentesListView.getSelectionModel().getSelectedItems()) {
+            t.setAprovado(true);
+            servicoLote.save(t);
+        }
+
+        carregarLotes();
+    }
+
+    @FXML
+    private void promoverUsuarios() {
+
+        for (Usuario t : promoverUsuariosListView.getSelectionModel().getSelectedItems()) {
+            Funcionario f = new Funcionario();
+        }
+
+        carregarLotes();
     }
 
     private void fazerLogin(Usuario user) {
@@ -293,6 +315,8 @@ public class MainWindowController {
     }
 
     private void updateMasterView(Lote t) {
+        if (t == null)
+            return;
 
         nomeLabel.setText(t.getNome());
 

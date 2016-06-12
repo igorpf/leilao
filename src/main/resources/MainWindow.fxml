@@ -132,8 +132,8 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="aprovarLotesPendentesButton" disable="true" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Aprovar Selecionados" />
-                        <ListView fx:id="lotesPendentesListView" layoutY="39.0" prefHeight="395.0" prefWidth="486.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="44.0" />
+                        <Button fx:id="aprovarLotesPendentesButton" disable="true" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#aprovarLotesPendentes" text="Aprovar Selecionados" />
+                        <ListView fx:id="lotesPendentesListView" fixedCellSize="90.0" layoutY="39.0" prefHeight="395.0" prefWidth="486.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="44.0" />
                      </children>
                   </AnchorPane>
               </content>
@@ -144,7 +144,7 @@
                      <children>
                         <ListView fx:id="promoverUsuariosListView" layoutY="32.0" prefHeight="387.0" prefWidth="486.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="44.0" />
                         <TextField fx:id="filtrarUsuariosField" layoutX="310.0" layoutY="14.0" prefHeight="25.0" prefWidth="162.0" promptText="Pesquisar" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
-                        <Button fx:id="promoverUsuariosButton" disable="true" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Promover Selecionados" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
+                        <Button fx:id="promoverUsuariosButton" disable="true" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#promoverUsuarios" text="Promover Selecionados" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
                      </children>
                   </AnchorPane>
               </content>

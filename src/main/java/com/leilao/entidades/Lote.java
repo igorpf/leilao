@@ -42,6 +42,7 @@ public class Lote {
     public Lote(){
         this.valorMinimo=BigDecimal.ZERO;
         this.lanceAtual=BigDecimal.ZERO;
+        this.aprovado = false;
     }
     
     public Integer getId() {
