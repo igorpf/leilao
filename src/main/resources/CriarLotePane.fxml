@@ -31,7 +31,7 @@
                   <Insets top="15.0" />
                </VBox.margin>
             </Label>
-            <TextArea fx:id="descricaoArea" prefColumnCount="30" prefHeight="100.0" />
+            <TextArea fx:id="descricaoArea" prefColumnCount="30" prefHeight="100.0" wrapText="true"/>
             <HBox alignment="CENTER_LEFT">
                <children>
                   <Label fx:id="areaLabel" prefWidth="100.0" text="Área" />
