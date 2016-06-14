@@ -71,10 +71,10 @@ public class CadastroPaneController {
         Usuario u = new Usuario();
         u.setNome(usernameField.getText());
         u.setSenha(passwordField.getText());
-        if (!nicknameField.getText().isEmpty());
-            //u.setApelido(nicknameField.getText());
-        else;
-        //u.setApelido(usernameField.getText());
+        if (!nicknameField.getText().isEmpty())
+            u.setApelido(nicknameField.getText());
+        else
+            u.setApelido(usernameField.getText());
 
         servicoUsuario.save(u);
 

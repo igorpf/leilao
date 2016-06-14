@@ -131,8 +131,8 @@ public class MainWindowController {
 
                 if (user.getNome().toLowerCase().contains(newValue.toLowerCase()))
                     return true;
-//                else if (user.getApelido().toLowerCase().contains(newValue.toLowerCase()))
-//                    return true;
+                else if (user.getApelido().toLowerCase().contains(newValue.toLowerCase()))
+                    return true;
                 else
                     return false;
             });

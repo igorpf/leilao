@@ -27,6 +27,9 @@ public class Usuario {
     private String nome;
     
     @Column
+    private String apelido;
+
+    @Column
     private String senha;
 
     @OneToMany(mappedBy = "comprador", fetch=FetchType.EAGER)
@@ -64,7 +67,15 @@ public class Usuario {
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
+
+    public String getApelido() {
+        return apelido;
+    }
+
+    public void setApelido(String apelido) {
+        this.apelido = apelido;
+    }
+
     public String getSenha() {
         return senha;
     }
