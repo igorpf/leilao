@@ -89,11 +89,14 @@ public class Lote {
     public void setLanceAtual(BigDecimal lanceAtual) throws Exception {
         if (this.lanceAtual.compareTo(lanceAtual) >= 0) {
             throw new Exception("O novo lance deve ser maior do que o lance atual");
-        } else if (this.valorMinimo.compareTo(lanceAtual) > 0) {
+        } else if ((this.lanceAtual.add(this.valorMinimo)).compareTo(lanceAtual) > 0) {
             throw new Exception("O novo lance deve ser maior ou igual ao valor mínimo");
         }
         this.lanceAtual = lanceAtual;
 
+        if(this.valorMinimo.compareTo(BigDecimal.ZERO) == 0) {
+            this.valorMinimo = this.lanceAtual.multiply(new BigDecimal(0.05));
+        }
     }
 
     public String getNome() {

@@ -236,7 +236,7 @@ public class CriarLotePaneController {
         t.setVendedor(owner);
 
         try {
-            t.setValorMinimo(new BigDecimal(lanceField.getText()));
+            t.setLanceAtual(new BigDecimal(lanceField.getText()));
         } catch (Exception e) {
             System.out.println(e);
         }
