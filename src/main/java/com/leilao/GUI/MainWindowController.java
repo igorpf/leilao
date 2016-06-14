@@ -30,7 +30,6 @@ import org.controlsfx.control.PopOver;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
-import sun.plugin.javascript.navig.Anchor;
 
 /**
  * Created by Arthur on 19/05/2016.
@@ -160,7 +159,7 @@ public class MainWindowController {
         try {
             loteListView.getItems().setAll(servicoLote.getAprovados());
             lotesPendentesListView.getItems().setAll(servicoLote.getNaoAprovados());
-            usuariosList.setAll(servicoUsuario.findAll());
+            usuariosList.setAll(servicoUsuario.findAllUsers());
         } catch (Exception e) {}
     }
 
@@ -285,7 +284,7 @@ public class MainWindowController {
 
             usuarioLogado = userDB;
 
-            if (usuarioLogado instanceof Usuario)
+            if (usuarioLogado instanceof Funcionario)
                 tabPane.getTabs().addAll(aprovarLotesTab, promoverUsuariosTab);
 
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PerfilPane.fxml"));

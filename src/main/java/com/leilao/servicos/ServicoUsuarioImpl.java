@@ -5,6 +5,7 @@
  */
 package com.leilao.servicos;
 
+import com.leilao.entidades.Funcionario;
 import com.leilao.entidades.Usuario;
 import com.leilao.repositorios.RepoUsuario;
 import java.util.ArrayList;
@@ -38,6 +39,15 @@ public class ServicoUsuarioImpl implements ServicoUsuario {
             l.add(user);
         });
         return l.stream().filter(u-> u instanceof Usuario).collect(Collectors.toList());
+    }
+
+    public List<Usuario> findAllUsers() {
+        List<Usuario> l = new ArrayList<>();
+        Iterator<Usuario> i = repositorio.findAll().iterator();
+        i.forEachRemaining(user->{
+            l.add(user);
+        });
+        return l.stream().filter(u-> !(u instanceof Funcionario)).collect(Collectors.toList());
     }
 
     @Override
