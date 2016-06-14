@@ -6,6 +6,7 @@
 package com.leilao.entidades;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import javax.persistence.*;
 
 /**
@@ -21,6 +22,10 @@ public class Lote {
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "lote_seq")
     @SequenceGenerator(name = "lote_seq")
     private Integer id;
+
+    private Calendar dataCriacao;
+
+    private Calendar dataFinal;
 
     private BigDecimal valorMinimo;
 
@@ -51,6 +56,18 @@ public class Lote {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Calendar getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public Calendar getDataFinal() {
+        return dataFinal;
+    }
+
+    public void setDataFinal(Calendar dataFinal) {
+        this.dataFinal = dataFinal;
     }
 
     public BigDecimal getValorMinimo() {
@@ -116,5 +133,12 @@ public class Lote {
     }
     public void setAprovado(Boolean aprovado){
         this.aprovado = aprovado;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        dataCriacao = Calendar.getInstance();
+        dataFinal = Calendar.getInstance();
+        dataFinal.add(Calendar.DATE, 7); // Leilão tem duração de uma semana
     }
 }
