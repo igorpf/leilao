@@ -41,6 +41,14 @@ public class Usuario {
         this.vendas= new ArrayList<>();
     }
     
+    public Usuario(Usuario u){
+        id = u.id;
+        nome = u.nome;
+        senha = u.senha;
+        compras = u.compras;
+        vendas = u.vendas;
+    }
+
     public Integer getId() {
         return id;
     }

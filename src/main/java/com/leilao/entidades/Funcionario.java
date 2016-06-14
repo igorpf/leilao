@@ -14,5 +14,11 @@ import javax.persistence.*;
 @Entity
 @DiscriminatorValue("1")
 public class Funcionario extends Usuario{
-    
+    public Funcionario() {
+        super();
+    }
+
+    public Funcionario(Usuario u) {
+        super(u);
+    }
 }

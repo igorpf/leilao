@@ -5,12 +5,12 @@ import com.leilao.entidades.Funcionario;
 import com.leilao.entidades.Imovel;
 import com.leilao.entidades.Lote;
 import com.leilao.entidades.Usuario;
+import com.leilao.servicos.ServicoFuncionario;
 import com.leilao.servicos.ServicoImovel;
 import com.leilao.servicos.ServicoLote;
 import com.leilao.servicos.ServicoUsuario;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
@@ -25,7 +25,6 @@ import java.io.IOException;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import org.controlsfx.control.ListSelectionView;
 import org.controlsfx.control.PopOver;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -79,6 +78,7 @@ public class MainWindowController {
     private ServicoLote servicoLote;
     private ServicoImovel servicoImovel;
     private ServicoUsuario servicoUsuario;
+    private ServicoFuncionario servicoFuncionario;
 
     private Usuario usuarioLogado;
 
@@ -87,6 +87,7 @@ public class MainWindowController {
         servicoLote = applicationContext.getBean(ServicoLote.class);
         servicoImovel = applicationContext.getBean(ServicoImovel.class);
         servicoUsuario = applicationContext.getBean(ServicoUsuario.class);
+        servicoFuncionario = applicationContext.getBean(ServicoFuncionario.class);
         loteListView.setPlaceholder(new Label("Não existem lotes à venda"));
 
         loteListView.setItems(FXCollections.observableArrayList());
@@ -255,8 +256,10 @@ public class MainWindowController {
     @FXML
     private void promoverUsuarios() {
 
-        for (Usuario t : promoverUsuariosListView.getSelectionModel().getSelectedItems()) {
-            Funcionario f = new Funcionario();
+        for (Usuario u : promoverUsuariosListView.getSelectionModel().getSelectedItems()) {
+            Funcionario f = new Funcionario(u);
+            servicoUsuario.delete(u.getId());
+            servicoFuncionario.save(f);
         }
 
         carregarLotes();
