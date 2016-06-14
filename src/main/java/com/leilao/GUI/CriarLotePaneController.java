@@ -95,20 +95,20 @@ public class CriarLotePaneController {
 
         val.registerValidator(nomeField, Validator.createEmptyValidator("É preciso inserir um nome."));
 
-        val.registerValidator(lanceField, (c, newString) ->
+        val.registerValidator(lanceField, (Control c, String newString) ->
                 ValidationResult.fromErrorIf(c, "É preciso informar o lance mínimo",
                         !hasValidFloat((String) newString)));
 
-        val.registerValidator(areaField, (c, newString) ->
+        val.registerValidator(areaField, (Control c, String newString) ->
                 ValidationResult.fromErrorIf(c, "É necessário informar uma área",
                         tipo2.isSelected() && !hasValidFloat((String) newString)));
 
-        val.registerValidator(banheirosField, (c, newString) ->
+        val.registerValidator(banheirosField, (Control c, String newString) ->
                 ValidationResult.fromErrorIf(c, "É necessário informar a quantidade de banheiros",
                         tipo2.isSelected() && newString.equals("")));
 
-        val.registerValidator(quartosField, (c, newString) ->
-                ValidationResult.fromErrorIf(c, "É necessário a quantidade de quartos",
+        val.registerValidator(quartosField, (Control c, String newString) ->
+                ValidationResult.fromErrorIf(c, "É necessário informar a quantidade de quartos",
                         tipo2.isSelected() && subtipo2.isSelected() && newString.equals("")));
 
         tipo2.selectedProperty().addListener(((observable, oldValue, newValue) -> {
@@ -118,6 +118,10 @@ public class CriarLotePaneController {
 
         subtipo2.selectedProperty().addListener(((observable, oldValue, newValue) -> {
             quartosField.setText(newValue ? "" : "1");
+        }));
+
+        tipo1.selectedProperty().addListener(((observable, oldValue, newValue) -> {
+            subtipo1.setSelected(true);
         }));
 
         tipo1.setSelected(true);
