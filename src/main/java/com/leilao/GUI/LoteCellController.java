@@ -9,6 +9,9 @@ import javafx.scene.layout.AnchorPane;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import javafx.scene.paint.Paint;
 
 /**
  * Created by Arthur on 19/05/2016.
@@ -17,7 +20,7 @@ public class LoteCellController {
 
     @FXML private AnchorPane root;
 
-    @FXML private Label nameLabel, priceLabel, descriptionLabel;
+    @FXML private Label nameLabel, priceLabel, estadoLabel, tempoLabel;
     @FXML private Label typeLabel, areaLabel, roomsLabel, bathroomsLabel;
 
     public void setImovel(Imovel t) {
@@ -55,11 +58,27 @@ public class LoteCellController {
 
     private void setBasicInfo(Lote t) {
         nameLabel.setText(t.getNome());
-        descriptionLabel.setText(t.getDescricao());
-        if (t.getLanceAtual().compareTo(BigDecimal.ZERO) == 0)
-            setPriceLabel(t.getValorMinimo());
-        else
-            setPriceLabel(t.getLanceAtual());
+        setPriceLabel(t.getLanceAtual());
+
+        if(!t.isAprovado() && !t.isFinalizado() && !t.isVendido()) {
+            estadoLabel.setText("Não aprovado");
+            estadoLabel.setTextFill(Paint.valueOf("ff0000"));
+        } else if(t.isAprovado() && !t.isFinalizado() && !t.isVendido()) {
+            estadoLabel.setText("Ativo");
+            estadoLabel.setTextFill(Paint.valueOf("00ff00"));
+        } else if(t.isFinalizado() && !t.isVendido()) {
+            estadoLabel.setText("Encerrado");
+            estadoLabel.setTextFill(Paint.valueOf("ff0000"));
+        } else if(t.isFinalizado() && t.isVendido()) {
+            estadoLabel.setText("Vendido");
+            estadoLabel.setTextFill(Paint.valueOf("0000ff"));
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("d'd 'HH'h'mm'min'ss's'");
+        Calendar timeLeft = (Calendar)t.getDataFinal().clone();
+        timeLeft.add(Calendar.MILLISECOND, (int) (-1 * Calendar.getInstance().getTimeInMillis()));
+
+        tempoLabel.setText(sdf.format(timeLeft.getTime()));
     }
 
     public DoubleProperty prefWidthProperty() {

@@ -36,11 +36,15 @@
                   <Label fx:id="bathroomsLabel" text="Banheiros" />
                </children>
             </FlowPane>
-            <Label fx:id="descriptionLabel" alignment="TOP_LEFT" text="Descrição" wrapText="true">
+            <AnchorPane>
+               <children>
+                  <Label fx:id="estadoLabel" alignment="TOP_LEFT" text="Estado" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <Label fx:id="tempoLabel" text="Tempo restante" textAlignment="RIGHT" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
                <padding>
-                  <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                  <Insets top="3.0" />
                </padding>
-            </Label>
+            </AnchorPane>
          </children>
       </VBox>
    </children>

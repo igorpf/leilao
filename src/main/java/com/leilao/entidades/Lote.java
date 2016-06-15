@@ -141,14 +141,14 @@ public class Lote {
         this.comprador = comprador;
     }
     
-    public Boolean getAprovado(){
+    public Boolean isAprovado(){
         return aprovado;
     }
     public void setAprovado(Boolean aprovado){
         this.aprovado = aprovado;
     }
 
-    public Boolean getFinalizado() {
+    public Boolean isFinalizado() {
         return finalizado;
     }
 
@@ -156,7 +156,7 @@ public class Lote {
         this.finalizado = finalizado;
     }
 
-    public Boolean getVendido() {
+    public Boolean isVendido() {
         return vendido;
     }
 
