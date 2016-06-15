@@ -9,8 +9,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 import javafx.scene.paint.Paint;
 
 /**
@@ -67,18 +66,38 @@ public class LoteCellController {
             estadoLabel.setText("Ativo");
             estadoLabel.setTextFill(Paint.valueOf("00ff00"));
         } else if(t.isFinalizado() && !t.isVendido()) {
+            tempoLabel.setText("");
             estadoLabel.setText("Encerrado");
             estadoLabel.setTextFill(Paint.valueOf("ff0000"));
         } else if(t.isFinalizado() && t.isVendido()) {
+            tempoLabel.setText("");
             estadoLabel.setText("Vendido");
             estadoLabel.setTextFill(Paint.valueOf("0000ff"));
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("d'd 'HH'h'mm'min'ss's'");
-        Calendar timeLeft = (Calendar)t.getDataFinal().clone();
-        timeLeft.add(Calendar.MILLISECOND, (int) (-1 * Calendar.getInstance().getTimeInMillis()));
+        setTimeLeft(t);
+    }
 
-        tempoLabel.setText(sdf.format(timeLeft.getTime()));
+    private void setTimeLeft(Lote t) {
+        long timeLeft = t.getTimeLeft();
+
+        if(timeLeft > 0){
+            Long days = TimeUnit.MILLISECONDS.toDays(timeLeft);
+            timeLeft = timeLeft - TimeUnit.DAYS.toMillis(days);
+
+            Long hours = TimeUnit.MILLISECONDS.toHours(timeLeft);
+            timeLeft = timeLeft - TimeUnit.HOURS.toMillis(hours);
+
+            Long minutes = TimeUnit.MILLISECONDS.toMinutes(timeLeft);
+            timeLeft = timeLeft - TimeUnit.MINUTES.toMillis(minutes);
+
+            Long seconds = TimeUnit.MILLISECONDS.toSeconds(timeLeft);
+
+            tempoLabel.setText(days.toString() + "d "
+                               + hours.toString() + "h"
+                               + minutes.toString() + "min"
+                               + seconds.toString());
+        }
     }
 
     public DoubleProperty prefWidthProperty() {
