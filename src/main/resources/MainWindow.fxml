@@ -64,18 +64,26 @@
                                           <Label fx:id="tipoLabel" text="Tipo" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" />
                                           <Label fx:id="precoLabel" text="Preço" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <font>
-                                                <Font name="System Bold" size="12.0" />
+                                                <Font name="System Bold" size="16.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </AnchorPane>
+                                    <Label fx:id="lanceMinimoLabel" text="Lançe mínimo">
+                                       <font>
+                                          <Font size="12.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </Label>
                                     <HBox spacing="5.0">
                                        <children>
                                           <TextField fx:id="lanceField" />
-                                          <Button fx:id="lanceButton" mnemonicParsing="false" text="Dar lance" />
+                                          <Button fx:id="lanceButton" mnemonicParsing="false" onAction="#darLance" prefHeight="26.0" prefWidth="132.0" text="Dar lance" />
                                        </children>
                                     </HBox>
-                                    <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefViewportHeight="200.0">
+                                    <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefViewportHeight="200.0" prefWidth="210.0">
                                        <content>
                                           <Text fx:id="descricaoText" strokeType="OUTSIDE" strokeWidth="0.0" text="Descrição" />
                                        </content>

@@ -22,6 +22,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -46,7 +47,7 @@ public class MainWindowController {
     @FXML private SplitPane listViewPane;
     @FXML private ListView<Lote> loteListView;
 
-    @FXML private Label nomeLabel, tipoLabel, precoLabel;
+    @FXML private Label nomeLabel, tipoLabel, precoLabel, lanceMinimoLabel;
     @FXML private Text descricaoText;
     @FXML private TextField lanceField;
     @FXML private Button lanceButton;
@@ -81,6 +82,7 @@ public class MainWindowController {
     private ServicoFuncionario servicoFuncionario;
 
     private Usuario usuarioLogado;
+    private Lote loteSelecionado;
 
     @FXML
     private void initialize() {
@@ -95,13 +97,17 @@ public class MainWindowController {
 
         loteListView.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
             updateMasterView(newValue);
+            lanceButton.setDisable(loteSelecionado == null);
         }));
+        
+        lanceButton.setDisable(true);
 
         descricaoText.wrappingWidthProperty().bind(masterViewPane.widthProperty().subtract(45));
 
         initializePopOver();
         usernameField.textProperty().addListener(((observable, oldValue, newValue) -> errorDisplay.hide()));
         passwordField.textProperty().addListener(((observable, oldValue, newValue) -> errorDisplay.hide()));
+        lanceField.textProperty().addListener(((observable, oldValue, newValue) -> errorDisplay.hide()));
 
         tabPane.getTabs().removeAll(aprovarLotesTab, promoverUsuariosTab);
 
@@ -161,6 +167,50 @@ public class MainWindowController {
             loteListView.getItems().setAll(servicoLote.getAprovados());
             lotesPendentesListView.getItems().setAll(servicoLote.getNaoAprovados());
             usuariosList.setAll(servicoUsuario.findAllUsers());
+        } catch (Exception e) {}
+    }
+    
+    @FXML
+    private void darLance() {
+        if (usuarioLogado == null) {
+            tabPane.getSelectionModel().select(perfilTab);
+            loginMessageLabel.setText("É preciso estar logado para dar lances.");
+            return;
+        }
+
+        if (usuarioLogado.getId().equals(loteSelecionado.getVendedor().getId())) {
+            errorLabel.setText("Você não pode dar lances no próprio lote");
+            errorDisplay.show(lanceButton);
+        } else if (usuarioLogado.getId().equals(loteSelecionado.getComprador().getId())) {
+            errorLabel.setText("Você já tem o maior lance nesse lote");
+            errorDisplay.show(lanceButton);
+        } else if (lanceField.getText().isEmpty()) {
+            errorLabel.setText("É necessário informar um lance");
+            errorDisplay.show(lanceButton);
+        } else if (loteSelecionado.getLanceMinimo().compareTo(new BigDecimal(lanceField.getText())) > 0) {
+            errorLabel.setText("Lance deve ser maior que lance mínimo");
+            errorDisplay.show(lanceButton);
+        } else if (usuarioLogado.getSaldo().compareTo(new BigDecimal(lanceField.getText())) < 0) {
+            errorLabel.setText("Saldo insuficiente para dar lance");
+            errorDisplay.show(lanceButton);
+        } else {
+            try {
+                loteSelecionado.setComprador(usuarioLogado);
+                loteSelecionado.setLanceAtual(new BigDecimal(lanceField.getText()));
+                usuarioLogado.subtractSaldo(new BigDecimal(lanceField.getText()));
+                usuarioLogado.addCompra(loteSelecionado);
+                
+                servicoUsuario.save(usuarioLogado);
+                servicoLote.save(loteSelecionado);
+            } catch (Exception e) {}
+        }
+        
+        
+    }
+    
+    private void atualizarLotes() {
+        try {
+            
         } catch (Exception e) {}
     }
 
@@ -317,9 +367,17 @@ public class MainWindowController {
     }
 
     private void updateMasterView(Lote t) {
-        if (t == null)
+        if (t == null) {
+            nomeLabel.setText("Nome");
+            tipoLabel.setText("Tipo");
+            descricaoText.setText("Descrição");
+            precoLabel.setText("Preço");
+            lanceMinimoLabel.setText("Lance mínimo");
             return;
-
+        }
+        
+        loteSelecionado = t;
+        
         nomeLabel.setText(t.getNome());
 
         if (t instanceof Imovel)
@@ -328,7 +386,8 @@ public class MainWindowController {
             tipoLabel.setText("Lote");
 
         descricaoText.setText(t.getDescricao());
-
+        precoLabel.setText("R$ " + t.getLanceAtual().toString());
+        lanceMinimoLabel.setText("Lance mínimo: R$ " + t.getLanceMinimo().toString());
     }
 
 }

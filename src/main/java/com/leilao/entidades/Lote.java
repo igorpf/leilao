@@ -44,10 +44,16 @@ public class Lote {
 
     private Boolean aprovado;
     
+    private Boolean finalizado;
+    
+    private Boolean vendido; 
+    
     public Lote(){
         this.valorMinimo=BigDecimal.ZERO;
         this.lanceAtual=BigDecimal.ZERO;
         this.aprovado = false;
+        this.finalizado = false;
+        this.vendido = false;
     }
     
     public Integer getId() {
@@ -98,6 +104,10 @@ public class Lote {
             this.valorMinimo = this.lanceAtual.multiply(new BigDecimal(0.05));
         }
     }
+    
+    public BigDecimal getLanceMinimo() {
+        return lanceAtual.add(valorMinimo);
+    }
 
     public String getNome() {
         return nome;
@@ -136,6 +146,22 @@ public class Lote {
     }
     public void setAprovado(Boolean aprovado){
         this.aprovado = aprovado;
+    }
+
+    public Boolean getFinalizado() {
+        return finalizado;
+    }
+
+    public void setFinalizado(Boolean finalizado) {
+        this.finalizado = finalizado;
+    }
+
+    public Boolean getVendido() {
+        return vendido;
+    }
+
+    public void setVendido(Boolean vendido) {
+        this.vendido = vendido;
     }
 
     @PrePersist

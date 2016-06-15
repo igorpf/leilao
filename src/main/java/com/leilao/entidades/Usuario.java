@@ -5,6 +5,7 @@
  */
 package com.leilao.entidades;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
@@ -31,6 +32,9 @@ public class Usuario {
 
     @Column
     private String senha;
+    
+    @Column
+    private BigDecimal saldo;
 
     @OneToMany(mappedBy = "comprador", fetch=FetchType.EAGER)
     private List<Lote> compras;
@@ -42,6 +46,7 @@ public class Usuario {
         this.nome="";
         this.compras= new ArrayList<>();
         this.vendas= new ArrayList<>();
+        this.saldo = BigDecimal.ZERO;
     }
     
     public Usuario(Usuario u){
@@ -82,6 +87,26 @@ public class Usuario {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public BigDecimal getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(BigDecimal saldo) {
+        this.saldo = saldo;
+    }
+    
+    public void addSaldo(BigDecimal valor) {
+        this.saldo = this.saldo.add(valor);
+    }
+    
+    public void subtractSaldo(BigDecimal valor) throws Exception {
+        if(this.saldo.subtract(valor).compareTo(BigDecimal.ZERO) >= 0) {
+            this.saldo = this.saldo.subtract(valor);
+        } else {
+            throw new Exception("Saldo não pode ser negativo");
+        }
     }
 
     public List<Lote> getCompras() {
