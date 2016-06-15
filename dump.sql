@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.2
--- Dumped by pg_dump version 9.5.2
+-- Dumped from database version 9.5.3
+-- Dumped by pg_dump version 9.5.3
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -49,7 +49,12 @@ CREATE TABLE lote (
     numeroquartos integer,
     tipo integer,
     comprador_id integer,
-    vendedor_id integer NOT NULL
+    vendedor_id integer NOT NULL,
+    aprovado boolean,
+    datacriacao timestamp without time zone,
+    datafinal timestamp without time zone,
+    finalizado boolean,
+    vendido boolean
 );
 
 
@@ -83,7 +88,10 @@ ALTER SEQUENCE lote_id_seq OWNED BY lote.id;
 CREATE TABLE usuario (
     type character varying(31) NOT NULL,
     id integer NOT NULL,
-    nome character varying(255)
+    nome character varying(255),
+    apelido character varying(255),
+    saldo numeric(19,2),
+    senha character varying(255)
 );
 
 
@@ -125,6 +133,36 @@ ALTER TABLE ONLY usuario ALTER COLUMN id SET DEFAULT nextval('usuario_id_seq'::r
 
 
 --
+-- Data for Name: lote; Type: TABLE DATA; Schema: public; Owner: leilao
+--
+
+COPY lote (type, id, descricao, lanceatual, nome, valorminimo, area, numerobanheiros, numeroquartos, tipo, comprador_id, vendedor_id, aprovado, datacriacao, datafinal, finalizado, vendido) FROM stdin;
+\.
+
+
+--
+-- Name: lote_id_seq; Type: SEQUENCE SET; Schema: public; Owner: leilao
+--
+
+SELECT pg_catalog.setval('lote_id_seq', 1, false);
+
+
+--
+-- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: leilao
+--
+
+COPY usuario (type, id, nome, apelido, saldo, senha) FROM stdin;
+\.
+
+
+--
+-- Name: usuario_id_seq; Type: SEQUENCE SET; Schema: public; Owner: leilao
+--
+
+SELECT pg_catalog.setval('usuario_id_seq', 1, false);
+
+
+--
 -- Name: lote_pkey; Type: CONSTRAINT; Schema: public; Owner: leilao
 --
 
@@ -159,7 +197,7 @@ ALTER TABLE ONLY lote
 --
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
-
+insert into usuario (type, apelido, nome, saldo, senha) values ('1','Administrador', 'admin',100,'admin');
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
 REVOKE ALL ON SCHEMA public FROM postgres;
 GRANT ALL ON SCHEMA public TO postgres;
