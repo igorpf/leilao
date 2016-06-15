@@ -27,6 +27,9 @@ public class Usuario {
     private String nome;
     
     @Column
+    private String apelido;
+
+    @Column
     private String senha;
 
     @OneToMany(mappedBy = "comprador", fetch=FetchType.EAGER)
@@ -41,6 +44,14 @@ public class Usuario {
         this.vendas= new ArrayList<>();
     }
     
+    public Usuario(Usuario u){
+        id = u.id;
+        nome = u.nome;
+        senha = u.senha;
+        compras = u.compras;
+        vendas = u.vendas;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -56,7 +67,15 @@ public class Usuario {
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
+
+    public String getApelido() {
+        return apelido;
+    }
+
+    public void setApelido(String apelido) {
+        this.apelido = apelido;
+    }
+
     public String getSenha() {
         return senha;
     }

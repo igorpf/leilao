@@ -32,6 +32,12 @@ public interface ServicoUsuario {
      * @return 
      */
     List<Usuario> findAll();
+
+    /** Busca todos os usuários que não são funcionários
+    *
+    * @return
+    */
+    List<Usuario> findAllUsers();
     
     /** Deleta o usuário com o id especificado
      * 

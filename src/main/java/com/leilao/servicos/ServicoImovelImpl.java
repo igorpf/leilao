@@ -43,5 +43,19 @@ public class ServicoImovelImpl implements ServicoImovel {
     public void save(Imovel i) {
         repositorio.save(i);
     }
+    
+    @Override
+    public List<Imovel> getResidencial() {
+        return repositorio.findByTipo(0);
+    }
+    
+     @Override
+    public List<Imovel> getComercial() {
+        return repositorio.findByTipo(1);
+    }
+    
+    public List<Imovel> findByNome(String nome) {
+        return repositorio.findByNome(nome);
+    }
 
 }

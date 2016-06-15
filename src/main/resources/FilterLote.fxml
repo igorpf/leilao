@@ -8,11 +8,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" focusTraversable="true" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="com.leilao.GUI.FilterLoteController">
+<AnchorPane id="AnchorPane" focusTraversable="true" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.leilao.GUI.FilterLoteController">
    <children>
       <AnchorPane prefHeight="400.0" prefWidth="600.0" />
-      <SplitPane fx:id="listViewPane" dividerPositions="0.5" layoutX="10.0" layoutY="10.0" prefHeight="389.0" prefWidth="592.0">
+      <SplitPane fx:id="listViewPane" dividerPositions="0.411864406779661" layoutX="10.0" layoutY="10.0" prefHeight="389.0" prefWidth="592.0">
          <items>
             <AnchorPane>
                <children>
@@ -37,10 +36,22 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <HBox spacing="5.0">
+                  <HBox id="nomehbox" alignment="CENTER_LEFT" spacing="5.0">
                      <children>
-                        <TextField id="filtersearchbar" fx:id="lanceField" visible="false" />
-                        <Button id="filterbutton" fx:id="lanceButton" mnemonicParsing="false" text="Buscar" visible="false" />
+                        <TextField id="filtersearchbar" fx:id="lanceField" prefHeight="25.0" prefWidth="255.0" />
+                        <Button id="filterbutton" fx:id="filterButton" alignment="CENTER" contentDisplay="BOTTOM" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Buscar" />
+                     </children>
+                  </HBox>
+                  <HBox id="tipohbox" alignment="CENTER_LEFT" layoutX="24.0" layoutY="64.0" spacing="5.0">
+                     <children>
+                        <RadioButton id="loterdbtn" mnemonicParsing="false" prefHeight="18.0" prefWidth="108.0" text="Lote">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="tipo" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton id="imovelrdbtn" mnemonicParsing="false" prefHeight="18.0" prefWidth="117.0" text="Imovel" toggleGroup="$tipo" />
+                        <RadioButton id="comercialrdbtn" mnemonicParsing="false" prefHeight="18.0" prefWidth="135.0" text="Comercial" toggleGroup="$tipo" />
+                        <Button id="filtertypebutton" fx:id="filtertypebutton" alignment="CENTER" contentDisplay="BOTTOM" mnemonicParsing="false" onAction="#carregarLotesNome" prefHeight="25.0" prefWidth="103.0" text="Buscar" />
                      </children>
                   </HBox>
                   <Label id="namelbl" fx:id="nomeLabel" text="Nome">

@@ -5,11 +5,13 @@
  */
 package com.leilao.servicos;
 
+import com.leilao.entidades.Funcionario;
 import com.leilao.entidades.Usuario;
 import com.leilao.repositorios.RepoUsuario;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +38,16 @@ public class ServicoUsuarioImpl implements ServicoUsuario {
         i.forEachRemaining(user->{
             l.add(user);
         });
-        return l;
+        return l.stream().filter(u-> u instanceof Usuario).collect(Collectors.toList());
+    }
+
+    public List<Usuario> findAllUsers() {
+        List<Usuario> l = new ArrayList<>();
+        Iterator<Usuario> i = repositorio.findAll().iterator();
+        i.forEachRemaining(user->{
+            l.add(user);
+        });
+        return l.stream().filter(u-> !(u instanceof Funcionario)).collect(Collectors.toList());
     }
 
     @Override

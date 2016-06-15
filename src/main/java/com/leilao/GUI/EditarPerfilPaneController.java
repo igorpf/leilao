@@ -79,7 +79,7 @@ public class EditarPerfilPaneController {
     @FXML
     private void salvarMudancas(ActionEvent sender) {
         if (!nicknameField.getText().isEmpty());
-            //user.setApelido(nicknameField.getText());
+            user.setApelido(nicknameField.getText());
 
         if (oldPasswordField.getText().equals(user.getSenha())
             && !newPasswordField.getText().isEmpty()

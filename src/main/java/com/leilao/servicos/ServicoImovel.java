@@ -36,4 +36,10 @@ public interface ServicoImovel {
      * @param i 
      */
     void save(Imovel i);
+    
+    List<Imovel> getResidencial();
+    
+    List<Imovel> getComercial();
+    
+    List<Imovel> findByNome(String nome);
 }

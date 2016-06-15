@@ -5,12 +5,12 @@ import com.leilao.entidades.Funcionario;
 import com.leilao.entidades.Imovel;
 import com.leilao.entidades.Lote;
 import com.leilao.entidades.Usuario;
+import com.leilao.servicos.ServicoFuncionario;
 import com.leilao.servicos.ServicoImovel;
 import com.leilao.servicos.ServicoLote;
 import com.leilao.servicos.ServicoUsuario;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
@@ -25,7 +25,6 @@ import java.io.IOException;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import org.controlsfx.control.ListSelectionView;
 import org.controlsfx.control.PopOver;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -79,6 +78,7 @@ public class MainWindowController {
     private ServicoLote servicoLote;
     private ServicoImovel servicoImovel;
     private ServicoUsuario servicoUsuario;
+    private ServicoFuncionario servicoFuncionario;
 
     private Usuario usuarioLogado;
 
@@ -87,6 +87,7 @@ public class MainWindowController {
         servicoLote = applicationContext.getBean(ServicoLote.class);
         servicoImovel = applicationContext.getBean(ServicoImovel.class);
         servicoUsuario = applicationContext.getBean(ServicoUsuario.class);
+        servicoFuncionario = applicationContext.getBean(ServicoFuncionario.class);
         loteListView.setPlaceholder(new Label("Não existem lotes à venda"));
 
         loteListView.setItems(FXCollections.observableArrayList());
@@ -103,6 +104,8 @@ public class MainWindowController {
         passwordField.textProperty().addListener(((observable, oldValue, newValue) -> errorDisplay.hide()));
 
         tabPane.getTabs().removeAll(aprovarLotesTab, promoverUsuariosTab);
+
+        lotesPendentesListView.setPlaceholder(new Label("Não existem lotes à espera de aprovação"));
 
         lotesPendentesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         lotesPendentesListView.setCellFactory(t -> new LoteCell());
@@ -128,16 +131,14 @@ public class MainWindowController {
 
                 if (user.getNome().toLowerCase().contains(newValue.toLowerCase()))
                     return true;
-//                else if (user.getApelido().toLowerCase().contains(newValue.toLowerCase()))
-//                    return true;
+                else if (user.getApelido().toLowerCase().contains(newValue.toLowerCase()))
+                    return true;
                 else
                     return false;
             });
         }));
 
-        try {
-            carregarLotes();
-        } catch (Exception e) {}
+        carregarLotes();
     }
 
     private void initializePopOver() {
@@ -155,10 +156,12 @@ public class MainWindowController {
     }
 
     @FXML
-    private void carregarLotes() throws Exception {
-        loteListView.getItems().setAll(servicoLote.findAll());
-        lotesPendentesListView.getItems().setAll(servicoLote.findAll());
-        usuariosList.setAll(servicoUsuario.findAll());
+    private void carregarLotes() {
+        try {
+            loteListView.getItems().setAll(servicoLote.getAprovados());
+            lotesPendentesListView.getItems().setAll(servicoLote.getNaoAprovados());
+            usuariosList.setAll(servicoUsuario.findAllUsers());
+        } catch (Exception e) {}
     }
 
     @FXML
@@ -233,11 +236,33 @@ public class MainWindowController {
 
         controller.setOwner(usuarioLogado);
         controller.setOnFinish(t -> {
-            if (t != null)
-                loteListView.getItems().add(t);
+            carregarLotes();
             mainPane.getChildren().setAll(listViewPane);
         });
 
+    }
+
+    @FXML
+    private void aprovarLotesPendentes() {
+
+        for (Lote t : lotesPendentesListView.getSelectionModel().getSelectedItems()) {
+            t.setAprovado(true);
+            servicoLote.save(t);
+        }
+
+        carregarLotes();
+    }
+
+    @FXML
+    private void promoverUsuarios() {
+
+        for (Usuario u : promoverUsuariosListView.getSelectionModel().getSelectedItems()) {
+            Funcionario f = new Funcionario(u);
+            servicoUsuario.delete(u.getId());
+            servicoFuncionario.save(f);
+        }
+
+        carregarLotes();
     }
 
     private void fazerLogin(Usuario user) {
@@ -262,7 +287,7 @@ public class MainWindowController {
 
             usuarioLogado = userDB;
 
-            if (usuarioLogado instanceof Usuario)
+            if (usuarioLogado instanceof Funcionario)
                 tabPane.getTabs().addAll(aprovarLotesTab, promoverUsuariosTab);
 
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PerfilPane.fxml"));
@@ -292,6 +317,8 @@ public class MainWindowController {
     }
 
     private void updateMasterView(Lote t) {
+        if (t == null)
+            return;
 
         nomeLabel.setText(t.getNome());
 
