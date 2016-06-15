@@ -164,7 +164,7 @@ public class MainWindowController {
     @FXML
     private void carregarLotes() {
         try {
-            loteListView.getItems().setAll(servicoLote.getAprovados());
+            loteListView.getItems().setAll(servicoLote.getValidos());
             lotesPendentesListView.getItems().setAll(servicoLote.getNaoAprovados());
             usuariosList.setAll(servicoUsuario.findAllUsers());
         } catch (Exception e) {}

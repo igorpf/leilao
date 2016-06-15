@@ -170,4 +170,18 @@ public class Lote {
         dataFinal = Calendar.getInstance();
         dataFinal.add(Calendar.DATE, 7); // Leilão tem duração de uma semana
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Lote) {
+            Lote toCompare = (Lote) o;
+            return this.id.equals(toCompare.id);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

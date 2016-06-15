@@ -51,7 +51,35 @@ public class ServicoLoteImpl implements ServicoLote {
 
     @Override
     public List<Lote> getNaoAprovados() {
-        return repositorio.findByAprovado(false);
+        List<Lote> lotes = new ArrayList<Lote>();
+
+        List<Lote> naoAprovados = repositorio.findByAprovado(false);
+        List<Lote> naoFinalizados = repositorio.findByFinalizado(false);
+        List<Lote> naoVendidos = repositorio.findByVendido(false);
+
+        for(Lote l : naoAprovados) {
+            if(naoFinalizados.contains(l) && naoVendidos.contains(l)) {
+                lotes.add(l);
+            }
+        }
+
+        return lotes;
     }
 
+    @Override
+    public List<Lote> getValidos() {
+        List<Lote> lotes = new ArrayList<Lote>();
+
+        List<Lote> aprovados = repositorio.findByAprovado(true);
+        List<Lote> naoFinalizados = repositorio.findByFinalizado(false);
+        List<Lote> naoVendidos = repositorio.findByVendido(false);
+
+        for(Lote l : aprovados) {
+            if(naoFinalizados.contains(l) && naoVendidos.contains(l)) {
+                lotes.add(l);
+            }
+        }
+
+        return lotes;
+    }
 }

@@ -23,4 +23,18 @@ public interface RepoLote extends CrudRepository<Lote, Integer>{
      * @return 
      */
     List<Lote> findByAprovado(boolean aprovado);
+
+    /** Retorna todos os lotes que estão finalizados ou não
+     *
+     * @param finalizado
+     * @return
+     */
+    List<Lote> findByFinalizado(boolean finalizado);
+
+    /** Retorna todos os lotes que estão vendidos ou não
+     *
+     * @param vendido
+     * @return
+     */
+    List<Lote> findByVendido(boolean vendido);
 }

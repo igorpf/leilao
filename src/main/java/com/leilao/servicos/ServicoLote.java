@@ -41,4 +41,6 @@ public interface ServicoLote {
     List<Lote> getAprovados();
     
     List<Lote> getNaoAprovados();
+
+    List<Lote> getValidos();
 }
