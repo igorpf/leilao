@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -25,7 +26,7 @@ public class PerfilPaneController {
     @FXML private Pane root, listsRoot;
 
     @FXML private ListView<Lote> comprasListView, vendasListView;
-    @FXML private Label nomeLabel;
+    @FXML private Label nomeLabel, saldoLabel;
 
     private Runnable onLogout;
     private Usuario user;
@@ -45,6 +46,7 @@ public class PerfilPaneController {
     public void setUsuario(Usuario usuario) {
         user = usuario;
         nomeLabel.setText(usuario.getNome());
+        saldoLabel.setText("Saldo: " + NumberFormat.getCurrencyInstance().format(usuario.getSaldo()));
         vendasListView.getItems().setAll(usuario.getVendas());
         comprasListView.getItems().setAll(usuario.getCompras());
     }

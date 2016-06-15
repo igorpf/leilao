@@ -54,5 +54,10 @@
             <ListView fx:id="vendasListView" fixedCellSize="90.0" />
          </children>
       </VBox>
+      <Label fx:id="saldoLabel" layoutX="14.0" layoutY="67.0" text="Saldo" AnchorPane.leftAnchor="14.0">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

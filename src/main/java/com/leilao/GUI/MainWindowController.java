@@ -23,6 +23,8 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.List;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -80,6 +82,8 @@ public class MainWindowController {
     private ServicoImovel servicoImovel;
     private ServicoUsuario servicoUsuario;
     private ServicoFuncionario servicoFuncionario;
+
+    private PerfilPaneController perfilController;
 
     private Usuario usuarioLogado;
     private Lote loteSelecionado;
@@ -164,6 +168,7 @@ public class MainWindowController {
     @FXML
     private void carregarLotes() {
         try {
+            atualizarLotes();
             loteListView.getItems().setAll(servicoLote.getValidos());
             lotesPendentesListView.getItems().setAll(servicoLote.getNaoAprovados());
             usuariosList.setAll(servicoUsuario.findAllUsers());
@@ -178,10 +183,12 @@ public class MainWindowController {
             return;
         }
 
+        initializePopOver();
         if (usuarioLogado.getId().equals(loteSelecionado.getVendedor().getId())) {
             errorLabel.setText("Você não pode dar lances no próprio lote");
             errorDisplay.show(lanceButton);
-        } else if (usuarioLogado.getId().equals(loteSelecionado.getComprador().getId())) {
+        } else if (loteSelecionado.getComprador() != null &&
+                   usuarioLogado.getId().equals(loteSelecionado.getComprador().getId())) {
             errorLabel.setText("Você já tem o maior lance nesse lote");
             errorDisplay.show(lanceButton);
         } else if (lanceField.getText().isEmpty()) {
@@ -195,6 +202,11 @@ public class MainWindowController {
             errorDisplay.show(lanceButton);
         } else {
             try {
+                Usuario compradorAnterior = loteSelecionado.getComprador();
+                if(compradorAnterior != null) {
+                    compradorAnterior.addSaldo(loteSelecionado.getLanceAtual());
+                    servicoUsuario.save(compradorAnterior);
+                }
                 loteSelecionado.setComprador(usuarioLogado);
                 loteSelecionado.setLanceAtual(new BigDecimal(lanceField.getText()));
                 usuarioLogado.subtractSaldo(new BigDecimal(lanceField.getText()));
@@ -202,14 +214,30 @@ public class MainWindowController {
                 
                 servicoUsuario.save(usuarioLogado);
                 servicoLote.save(loteSelecionado);
+
+                perfilController.setUsuario(usuarioLogado);
             } catch (Exception e) {}
         }
         
-        
+        carregarLotes();
     }
     
     private void atualizarLotes() {
         try {
+            List<Lote> lotes = servicoLote.findAll();
+            for(Lote l : lotes) {
+                long timeLeft = l.getTimeLeft();
+                Usuario comprador = l.getComprador();
+
+                if(timeLeft <= 0 && comprador != null) {
+                    l.setVendido(true);
+                    l.setFinalizado(true);
+                    servicoLote.save(l);
+                } else if (timeLeft <= 0) {
+                    l.setFinalizado(true);
+                    servicoLote.save(l);
+                }
+            }
             
         } catch (Exception e) {}
     }
@@ -353,11 +381,11 @@ public class MainWindowController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            PerfilPaneController controller = loader.getController();
+            perfilController = loader.getController();
             perfilPane.getChildren().setAll(n);
 
-            controller.setUsuario(userDB);
-            controller.setOnLogout(() -> {
+            perfilController.setUsuario(userDB);
+            perfilController.setOnLogout(() -> {
                 usuarioLogado = null;
                 perfilPane.getChildren().setAll(loginPane);
                 tabPane.getTabs().removeAll(aprovarLotesTab, promoverUsuariosTab);
@@ -386,8 +414,8 @@ public class MainWindowController {
             tipoLabel.setText("Lote");
 
         descricaoText.setText(t.getDescricao());
-        precoLabel.setText("R$ " + t.getLanceAtual().toString());
-        lanceMinimoLabel.setText("Lance mínimo: R$ " + t.getLanceMinimo().toString());
+        precoLabel.setText(NumberFormat.getCurrencyInstance().format(t.getLanceAtual().doubleValue()));
+        lanceMinimoLabel.setText("Lance mínimo: " + NumberFormat.getCurrencyInstance().format(t.getLanceMinimo().doubleValue()));
     }
 
 }
