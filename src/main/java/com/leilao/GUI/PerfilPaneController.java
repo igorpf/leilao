@@ -4,6 +4,7 @@ import com.leilao.PersistenceConfig;
 import com.leilao.entidades.Lote;
 import com.leilao.entidades.Usuario;
 import com.leilao.servicos.ServicoLote;
+import com.leilao.servicos.ServicoUsuario;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,12 +15,18 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ListChangeListener;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
+import org.controlsfx.control.PopOver;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -31,12 +38,17 @@ public class PerfilPaneController {
     private static final ApplicationContext applicationContext = new AnnotationConfigApplicationContext(PersistenceConfig.class);
 
     private ServicoLote servicoLote;
+    private ServicoUsuario servicoUsuario;
 
     @FXML private Pane root, listsRoot;
 
+    private PopOver errorDisplay;
+    private Label errorLabel;
+
     @FXML private ListView<Lote> comprasListView, vendasListView;
     @FXML private Label nomeLabel, saldoLabel;
-    @FXML private Button cancelarButton;
+    @FXML private Button cancelarButton, saldoButton;
+    @FXML private TextField saldoField;
 
     private Runnable onLogout;
     private Usuario user;
@@ -44,6 +56,7 @@ public class PerfilPaneController {
     @FXML
     private void initialize() {
         servicoLote = applicationContext.getBean(ServicoLote.class);
+        servicoUsuario = applicationContext.getBean(ServicoUsuario.class);
 
         comprasListView.setItems(FXCollections.observableArrayList());
         vendasListView.setItems(FXCollections.observableArrayList());
@@ -67,6 +80,32 @@ public class PerfilPaneController {
         });
 
         cancelarButton.setDisable(true);
+
+        saldoField.textProperty().addListener((observable, oldValue,  newValue) -> {
+            if (!newValue.matches("\\d*[[\\.,]\\d*]?")) {
+                String[] parts = newValue.split("[,\\.]");
+                String replacement = parts[0].replaceAll("[^\\d]","");
+                for (int i = 1; i < parts.length; i++)
+                    replacement += (i == 1 ? "." : "") + parts[i].replaceAll("[^\\d]","");;
+                ((StringProperty) observable).setValue(replacement);
+            }
+        });
+
+        initializePopOver();
+    }
+
+    private void initializePopOver() {
+        errorDisplay = new PopOver();
+        errorDisplay.setArrowLocation(PopOver.ArrowLocation.LEFT_CENTER);
+        errorDisplay.setDetachable(false);
+        errorDisplay.setAutoHide(true);
+
+        errorLabel = new Label();
+        errorLabel.setPrefHeight(20);
+        errorLabel.setPadding(new Insets(0,10,0,10));
+        errorLabel.setTextFill(Color.RED);
+
+        errorDisplay.setContentNode(errorLabel);
     }
 
     public void setUsuario(Usuario usuario) {
@@ -79,6 +118,26 @@ public class PerfilPaneController {
 
     public void setOnLogout(Runnable function) {
         onLogout = function;
+    }
+
+    @FXML
+    private void adicionarSaldo() {
+        user.addSaldo(new BigDecimal(saldoField.getText()));
+        servicoUsuario.save(user);
+        setUsuario(user);
+    }
+
+    @FXML
+    private void subtrairSaldo() {
+        try {
+            user.subtractSaldo(new BigDecimal(saldoField.getText()));
+            servicoUsuario.save(user);
+            setUsuario(user);
+        } catch (Exception e) {
+            initializePopOver();
+            errorLabel.setText("Saldo insuficiente para saque");
+            errorDisplay.show(saldoButton);
+        }
     }
 
     @FXML

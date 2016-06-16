@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.List;
+import javafx.beans.property.StringProperty;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -105,6 +106,16 @@ public class MainWindowController {
         }));
         
         lanceButton.setDisable(true);
+
+        lanceField.textProperty().addListener((observable, oldValue,  newValue) -> {
+            if (!newValue.matches("\\d*[[\\.,]\\d*]?")) {
+                String[] parts = newValue.split("[,\\.]");
+                String replacement = parts[0].replaceAll("[^\\d]","");
+                for (int i = 1; i < parts.length; i++)
+                    replacement += (i == 1 ? "." : "") + parts[i].replaceAll("[^\\d]","");;
+                ((StringProperty) observable).setValue(replacement);
+            }
+        });
 
         descricaoText.wrappingWidthProperty().bind(masterViewPane.widthProperty().subtract(45));
 
