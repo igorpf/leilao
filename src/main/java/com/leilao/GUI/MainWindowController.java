@@ -231,9 +231,13 @@ public class MainWindowController {
                 Usuario comprador = l.getComprador();
 
                 if(timeLeft <= 0 && comprador != null) {
+                    Usuario vendedor = l.getVendedor();
+                    vendedor.addSaldo(l.getLanceAtual());
+
                     l.setVendido(true);
                     l.setFinalizado(true);
                     servicoLote.save(l);
+                    servicoUsuario.save(vendedor);
                 } else if (timeLeft <= 0) {
                     l.setFinalizado(true);
                     servicoLote.save(l);
