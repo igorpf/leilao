@@ -24,7 +24,9 @@ import javafx.scene.layout.Pane;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import javafx.beans.property.StringProperty;
 
 import javafx.scene.paint.Color;
@@ -214,6 +216,14 @@ public class MainWindowController {
             errorDisplay.show(lanceButton);
         } else {
             try {
+                long timeLeft = loteSelecionado.getTimeLeft();
+                Long minutes = TimeUnit.MILLISECONDS.toMinutes(timeLeft);
+                if(minutes < 5) {
+                    Calendar dataFinal = Calendar.getInstance();
+                    dataFinal.add(Calendar.MINUTE, 5);
+                    loteSelecionado.setDataFinal(dataFinal);
+                }
+
                 Usuario compradorAnterior = loteSelecionado.getComprador();
                 if(compradorAnterior != null) {
                     compradorAnterior.addSaldo(loteSelecionado.getLanceAtual());

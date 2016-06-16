@@ -142,11 +142,13 @@ public class PerfilPaneController {
 
     @FXML
     private void atualizarVendas() {
+        user = servicoUsuario.get(user.getId());
         vendasListView.getItems().setAll(user.getVendas());
     }
 
     @FXML
     private void atualizarCompras() {
+        user = servicoUsuario.get(user.getId());
         comprasListView.getItems().setAll(user.getCompras());
     }
 
