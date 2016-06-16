@@ -110,7 +110,7 @@ public class PerfilPaneController {
 
     public void setUsuario(Usuario usuario) {
         user = usuario;
-        nomeLabel.setText(usuario.getNome());
+        nomeLabel.setText(usuario.getApelido());
         saldoLabel.setText("Saldo: " + NumberFormat.getCurrencyInstance().format(usuario.getSaldo()));
         vendasListView.getItems().setAll(usuario.getVendas());
         comprasListView.getItems().setAll(usuario.getCompras());

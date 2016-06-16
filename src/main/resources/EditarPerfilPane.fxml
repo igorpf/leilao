@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
 <VBox alignment="CENTER" fillWidth="false" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.leilao.GUI.EditarPerfilPaneController">
    <children>
       <Label prefWidth="150.0" text="Apelido" />
@@ -33,7 +32,7 @@
       <PasswordField fx:id="confirmPasswordField" prefWidth="150.0" />
       <HBox alignment="CENTER" prefHeight="35.0" prefWidth="200.0" spacing="30.0">
          <children>
-            <Button fx:id="senhaSaveButton" defaultButton="true" mnemonicParsing="false" onAction="#salvarMudancas" text="Salvar mudanças" />
+            <Button fx:id="senhaSaveButton" defaultButton="true" mnemonicParsing="false" onAction="#salvarMudancas" text="Salvar" />
             <Button mnemonicParsing="false" onAction="#cancelar" text="Cancelar" />
          </children>
          <VBox.margin>
