@@ -37,7 +37,6 @@ public interface ServicoImovel {
      */
     void save(Imovel i);
     
-     List<Imovel> findByTipo(int tipo);
     
     //List<Imovel> findByTipoByOrderByValorMinimoAsc(int tipo);
    // List<Imovel> findByTipoByOrderByNumeroQuartosAsc(int tipo);

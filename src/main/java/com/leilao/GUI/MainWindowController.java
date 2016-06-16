@@ -23,15 +23,12 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-<<<<<<< HEAD
 import javafx.scene.Parent;
-=======
 import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javafx.beans.property.StringProperty;
->>>>>>> c25f108dc074d94c7ee47be4ed0b849eef82ce40
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
