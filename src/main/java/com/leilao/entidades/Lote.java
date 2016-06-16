@@ -164,11 +164,16 @@ public class Lote {
         this.vendido = vendido;
     }
 
+    public long getTimeLeft() {
+        Calendar now = Calendar.getInstance();
+        return this.getDataFinal().getTimeInMillis() - now.getTimeInMillis();
+    }
+
     @PrePersist
     protected void onCreate() {
         dataCriacao = Calendar.getInstance();
         dataFinal = Calendar.getInstance();
-        dataFinal.add(Calendar.DATE, 7); // Leilão tem duração de uma semana
+        dataFinal.add(Calendar.MINUTE, 6); // Leilão tem duração de 6 minutos para teste
     }
 
     @Override

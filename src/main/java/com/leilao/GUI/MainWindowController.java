@@ -23,7 +23,15 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+<<<<<<< HEAD
 import javafx.scene.Parent;
+=======
+import java.text.NumberFormat;
+import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javafx.beans.property.StringProperty;
+>>>>>>> c25f108dc074d94c7ee47be4ed0b849eef82ce40
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -84,6 +92,8 @@ public class MainWindowController {
     private ServicoUsuario servicoUsuario;
     private ServicoFuncionario servicoFuncionario;
 
+    private PerfilPaneController perfilController;
+
     private Usuario usuarioLogado;
     private Lote loteSelecionado;
     
@@ -110,6 +120,16 @@ public class MainWindowController {
         
         lanceButton.setDisable(true);
 
+        lanceField.textProperty().addListener((observable, oldValue,  newValue) -> {
+            if (!newValue.matches("\\d*[[\\.,]\\d*]?")) {
+                String[] parts = newValue.split("[,\\.]");
+                String replacement = parts[0].replaceAll("[^\\d]","");
+                for (int i = 1; i < parts.length; i++)
+                    replacement += (i == 1 ? "." : "") + parts[i].replaceAll("[^\\d]","");;
+                ((StringProperty) observable).setValue(replacement);
+            }
+        });
+
         descricaoText.wrappingWidthProperty().bind(masterViewPane.widthProperty().subtract(45));
 
         initializePopOver();
@@ -119,6 +139,7 @@ public class MainWindowController {
         lanceField.textProperty().addListener(((observable, oldValue, newValue) -> errorDisplay.hide()));
 
         tabPane.getTabs().removeAll(aprovarLotesTab, promoverUsuariosTab);
+        tabPane.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> carregarLotes()));
 
         lotesPendentesListView.setPlaceholder(new Label("Não existem lotes à espera de aprovação"));
 
@@ -189,6 +210,7 @@ public class MainWindowController {
     @FXML
     private void carregarLotes() {
         try {
+            atualizarLotes();
             loteListView.getItems().setAll(servicoLote.getValidos());
             lotesPendentesListView.getItems().setAll(servicoLote.getNaoAprovados());
             usuariosList.setAll(servicoUsuario.findAllUsers());
@@ -203,10 +225,12 @@ public class MainWindowController {
             return;
         }
 
+        initializePopOver();
         if (usuarioLogado.getId().equals(loteSelecionado.getVendedor().getId())) {
             errorLabel.setText("Você não pode dar lances no próprio lote");
             errorDisplay.show(lanceButton);
-        } else if (usuarioLogado.getId().equals(loteSelecionado.getComprador().getId())) {
+        } else if (loteSelecionado.getComprador() != null &&
+                   usuarioLogado.getId().equals(loteSelecionado.getComprador().getId())) {
             errorLabel.setText("Você já tem o maior lance nesse lote");
             errorDisplay.show(lanceButton);
         } else if (lanceField.getText().isEmpty()) {
@@ -220,6 +244,19 @@ public class MainWindowController {
             errorDisplay.show(lanceButton);
         } else {
             try {
+                long timeLeft = loteSelecionado.getTimeLeft();
+                Long minutes = TimeUnit.MILLISECONDS.toMinutes(timeLeft);
+                if(minutes < 5) {
+                    Calendar dataFinal = Calendar.getInstance();
+                    dataFinal.add(Calendar.MINUTE, 5);
+                    loteSelecionado.setDataFinal(dataFinal);
+                }
+
+                Usuario compradorAnterior = loteSelecionado.getComprador();
+                if(compradorAnterior != null) {
+                    compradorAnterior.addSaldo(loteSelecionado.getLanceAtual());
+                    servicoUsuario.save(compradorAnterior);
+                }
                 loteSelecionado.setComprador(usuarioLogado);
                 loteSelecionado.setLanceAtual(new BigDecimal(lanceField.getText()));
                 usuarioLogado.subtractSaldo(new BigDecimal(lanceField.getText()));
@@ -227,14 +264,34 @@ public class MainWindowController {
                 
                 servicoUsuario.save(usuarioLogado);
                 servicoLote.save(loteSelecionado);
+
+                perfilController.setUsuario(usuarioLogado);
             } catch (Exception e) {}
         }
         
-        
+        carregarLotes();
     }
     
     private void atualizarLotes() {
         try {
+            List<Lote> lotes = servicoLote.findAll();
+            for(Lote l : lotes) {
+                long timeLeft = l.getTimeLeft();
+                Usuario comprador = l.getComprador();
+
+                if(timeLeft <= 0 && comprador != null) {
+                    Usuario vendedor = l.getVendedor();
+                    vendedor.addSaldo(l.getLanceAtual());
+
+                    l.setVendido(true);
+                    l.setFinalizado(true);
+                    servicoLote.save(l);
+                    servicoUsuario.save(vendedor);
+                } else if (timeLeft <= 0) {
+                    l.setFinalizado(true);
+                    servicoLote.save(l);
+                }
+            }
             
         } catch (Exception e) {}
     }
@@ -378,11 +435,11 @@ public class MainWindowController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            PerfilPaneController controller = loader.getController();
+            perfilController = loader.getController();
             perfilPane.getChildren().setAll(n);
 
-            controller.setUsuario(userDB);
-            controller.setOnLogout(() -> {
+            perfilController.setUsuario(userDB);
+            perfilController.setOnLogout(() -> {
                 usuarioLogado = null;
                 perfilPane.getChildren().setAll(loginPane);
                 tabPane.getTabs().removeAll(aprovarLotesTab, promoverUsuariosTab);
@@ -411,8 +468,8 @@ public class MainWindowController {
             tipoLabel.setText("Lote");
 
         descricaoText.setText(t.getDescricao());
-        precoLabel.setText("R$ " + t.getLanceAtual().toString());
-        lanceMinimoLabel.setText("Lance mínimo: R$ " + t.getLanceMinimo().toString());
+        precoLabel.setText(NumberFormat.getCurrencyInstance().format(t.getLanceAtual().doubleValue()));
+        lanceMinimoLabel.setText("Lance mínimo: " + NumberFormat.getCurrencyInstance().format(t.getLanceMinimo().doubleValue()));
     }
     
     
