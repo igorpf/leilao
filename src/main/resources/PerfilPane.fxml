@@ -46,6 +46,7 @@
                      </font>
                   </Label>
                   <Button mnemonicParsing="false" onAction="#atualizarVendas" text="Atualizar" />
+                  <Button fx:id="cancelarButton" mnemonicParsing="false" onAction="#cancelarLotes" text="Cancelar Lotes" />
                </children>
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />

@@ -234,6 +234,7 @@ public class CriarLotePaneController {
         t.setNome(nomeField.getText());
         t.setDescricao(descricaoArea.getText());
         t.setVendedor(owner);
+        owner.addVenda(t);
 
         try {
             t.setLanceAtual(new BigDecimal(lanceField.getText()));

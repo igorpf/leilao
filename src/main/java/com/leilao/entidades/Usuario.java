@@ -133,6 +133,10 @@ public class Usuario {
         this.vendas.add(venda);
     }
 
+    public void deleteVenda(Lote venda) {
+        this.vendas.remove(venda);
+    }
+
     @Override
     public String toString() {
         return getNome();

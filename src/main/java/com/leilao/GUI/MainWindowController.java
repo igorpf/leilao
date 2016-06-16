@@ -114,6 +114,7 @@ public class MainWindowController {
         lanceField.textProperty().addListener(((observable, oldValue, newValue) -> errorDisplay.hide()));
 
         tabPane.getTabs().removeAll(aprovarLotesTab, promoverUsuariosTab);
+        tabPane.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> carregarLotes()));
 
         lotesPendentesListView.setPlaceholder(new Label("Não existem lotes à espera de aprovação"));
 
