@@ -43,4 +43,6 @@ public interface ServicoLote {
     List<Lote> getNaoAprovados();
 
     List<Lote> getValidos();
+    
+    List<Lote> findAllByOrderByValorMinimoAsc();
 }

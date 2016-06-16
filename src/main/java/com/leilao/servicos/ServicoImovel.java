@@ -36,4 +36,12 @@ public interface ServicoImovel {
      * @param i 
      */
     void save(Imovel i);
+    
+     List<Imovel> findByTipo(int tipo);
+    
+    //List<Imovel> findByTipoByOrderByValorMinimoAsc(int tipo);
+   // List<Imovel> findByTipoByOrderByNumeroQuartosAsc(int tipo);
+   // List<Imovel> findByTipoByOrderByNumeroBanheirosAsc(int tipo);
+    
+   // List<Imovel> findByTipoByOrderByAreaAsc(int tipo);
 }

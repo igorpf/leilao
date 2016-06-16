@@ -6,6 +6,7 @@
 package com.leilao.repositorios;
 
 import com.leilao.entidades.Imovel;
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,5 +16,12 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface RepoImovel extends CrudRepository<Imovel, Integer>{
+    List<Imovel> findByTipo(int tipo);
+    
+    List<Imovel> findByTipoByOrderByValorMinimoAsc(int tipo);
+    List<Imovel> findByTipoByOrderByNumeroQuartosAsc(int tipo);
+    List<Imovel> findByTipoByOrderByNumeroBanheirosAsc(int tipo);
+    
+    List<Imovel> findByTipoByOrderByAreaAsc(int tipo);
     
 }

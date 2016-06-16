@@ -37,4 +37,8 @@ public interface RepoLote extends CrudRepository<Lote, Integer>{
      * @return
      */
     List<Lote> findByVendido(boolean vendido);
+    
+    List<Lote> findAllByOrderByValorMinimoAsc();
+    
+    
 }

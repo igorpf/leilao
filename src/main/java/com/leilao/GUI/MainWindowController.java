@@ -23,6 +23,7 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import javafx.scene.Parent;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -63,6 +64,8 @@ public class MainWindowController {
     private PopOver errorDisplay;
     private Label errorLabel;
 
+    private PopOver filterPopOver;
+    
     // Aprovar lotes
     @FXML private Button aprovarLotesPendentesButton;
     @FXML private ListView<Lote> lotesPendentesListView;
@@ -83,6 +86,11 @@ public class MainWindowController {
 
     private Usuario usuarioLogado;
     private Lote loteSelecionado;
+    
+    //Filtros
+    @FXML private AnchorPane filteranchorpane;
+    @FXML private Button filterBtn;
+    private boolean filteropen = false;
 
     @FXML
     private void initialize() {
@@ -105,6 +113,7 @@ public class MainWindowController {
         descricaoText.wrappingWidthProperty().bind(masterViewPane.widthProperty().subtract(45));
 
         initializePopOver();
+        initializeFilterPopOver();
         usernameField.textProperty().addListener(((observable, oldValue, newValue) -> errorDisplay.hide()));
         passwordField.textProperty().addListener(((observable, oldValue, newValue) -> errorDisplay.hide()));
         lanceField.textProperty().addListener(((observable, oldValue, newValue) -> errorDisplay.hide()));
@@ -159,6 +168,22 @@ public class MainWindowController {
         errorLabel.setTextFill(Color.RED);
 
         errorDisplay.setContentNode(errorLabel);
+    }
+    @FXML
+    private void initializeFilterPopOver(){
+        filterPopOver = new PopOver();
+        filterPopOver.setDetachable(true);
+        filterPopOver.setArrowLocation(PopOver.ArrowLocation.LEFT_CENTER);
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("FilterSearch.fxml"));
+        try{
+            filterPopOver.setContentNode((Node)loader.load());
+        }
+        catch(IOException ex){System.out.println(ex);}
+        
+    }
+    @FXML
+    private void openFilterPopOver(){
+        filterPopOver.show(filterBtn);
     }
 
     @FXML
@@ -389,5 +414,9 @@ public class MainWindowController {
         precoLabel.setText("R$ " + t.getLanceAtual().toString());
         lanceMinimoLabel.setText("Lance mínimo: R$ " + t.getLanceMinimo().toString());
     }
+    
+    
+    
+    
 
 }

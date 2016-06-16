@@ -82,4 +82,10 @@ public class ServicoLoteImpl implements ServicoLote {
 
         return lotes;
     }
+    
+    @Override
+    public List<Lote> findAllByOrderByValorMinimoAsc(){
+        return repositorio.findAllByOrderByValorMinimoAsc();
+    }
+    
 }
